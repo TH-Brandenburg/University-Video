@@ -1,0 +1,9 @@
+{
+  "name": "weavid-symfony",
+  "version": "0.0.1",
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "sb-creative": "git@github.com:BlackrockDigital/startbootstrap-creative#v1.0.2"
+  },
+  "private": true
+}
