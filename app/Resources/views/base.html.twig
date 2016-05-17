@@ -12,6 +12,7 @@
 
         <!-- Bootstrap Core CSS -->
         <link rel="stylesheet" href="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/bootstrap/dist/css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/bootswatch/paper/bootstrap.min.css" type="text/css">
 
         <!-- Fonts -->
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -21,15 +22,13 @@
         <!-- Animate -->
         <link rel="stylesheet" href="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/animate.css/animate.min.css">
 
-        <!-- SB Creative -->
-        <link rel="stylesheet" href="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/sb-creative/css/creative.css">
-
         <!--[if lt IE 9]>
         <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/html5shiv/dist/html5shiv.js"></script>
         <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/respond/dest/respond.src.js"></script>
         <![endif]-->
 
         <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ app.request.getSchemeAndHttpHost() }}/assets/css/custom.css">
         {% block stylesheets %}{% endblock %}
 
         <!-- Favicon -->
@@ -40,7 +39,9 @@
 
         {% include "navbar.html.twig" %}
 
-        {% block body %}{% endblock %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
 
         <!-- jQuery -->
         <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/jquery/dist/jquery.min.js"></script>
@@ -48,14 +49,6 @@
         <!-- Bootstrap Core JavaScript -->
         <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 
-        <!-- Plugin JavaScript -->
-        <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/jquery.easing/js/jquery.easing.min.js"></script>
-        <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/FitText.js/jquery.fittext.js"></script>
-        <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/wow/dist/wow.min.js"></script>
-
-        <!-- Custom Theme JavaScript -->
-        <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/sb-creative/js/creative.js"></script>
         {% block javascripts %}{% endblock %}
-        <script type="text/javascript" src=""></script>
     </body>
 </html>

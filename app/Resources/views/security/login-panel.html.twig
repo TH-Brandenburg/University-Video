@@ -1,0 +1,32 @@
+<div class="login-panel panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Mein Konto</h3>
+    </div>
+    <div class="panel-body">
+        {% if error.message is defined %}<div class="alert alert-danger">
+            {{ error.message|replace({'Bad credentials.' : 'Falscher Benutzername oder Passwort.'}) }}
+            </div>{% endif %}
+        <form role="form" action="{{ path('login') }}" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <input class="form-control" placeholder="E-Mail" name="_username" type="email"
+                           value="{% if last_email is defined %}{{ last_email }}{% endif %}" autofocus>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="Passwort" name="_password" type="password" autofocus>
+                </div>
+                <button type="submit" class="btn btn-default btn-lg btn-block">Anmelden</button>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="remember_me" name="_remember_me" checked>
+                        Anmeldung merken
+                    </label>
+                </div>
+                <div class="form-group">
+                    Noch kein Konto? <a href="{{ path('registration') }}">Registrieren</a><br>
+                    Passwort vergessen? <a href="{# path('forgot') #}">Wiederherstellen</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

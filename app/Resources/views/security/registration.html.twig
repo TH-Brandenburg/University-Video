@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}
+    Registrierung
+{% endblock %}
+
+{% block body %}
+    <h2>Registrierung</h2>
+    <p>Bitte achten Sie bei Ihren Angaben auf Vollständigkeit und Korrektheit. Die Pflichtangaben wurden mit einem *
+        gekennzeichnet und sind für eine Antragstellung zwingend erforderlich.</p>
+    {{ form_start(form) }}
+    {% if not form.vars.valid %}
+        <div>{{ form_errors(form) }}</div>
+    {% endif %}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    <style type="text/css">
+        label.required:before {
+            content: "* ";
+        }
+    </style>
+{% endblock %}

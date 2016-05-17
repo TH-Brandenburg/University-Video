@@ -2,23 +2,41 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    encoders:
+        WeavidBundle\Entity\Users:
+            algorithm: bcrypt
+
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+        weavid_database_provider:
+            entity:
+                class: WeavidBundle:Users
+                property: email
+
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        #dev:
+        #    pattern: ^/(_(profiler|wdt)|css|images|js)/
+        #    security: false
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
+            pattern: ^/
+            form_login:
+                login_path: login
+                check_path: login
+                require_previous_session: false
+            provider: weavid_database_provider
+            logout:
+                path: /logout
+            remember_me:
+                secret: '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+#    access_control:
+#        - { path: ^/registration, allow_if: "!has_role('ROLE_USER')" }
+#        - { path: ^/forgot, allow_if: "!has_role('ROLE_USER')" }
+#        - { path: ^/verify, allow_if: "!has_role('ROLE_USER')" }
+#        - { path: ^/login, allow_if: "!has_role('ROLE_USER')" }

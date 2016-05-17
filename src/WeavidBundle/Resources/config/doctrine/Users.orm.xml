@@ -85,15 +85,7 @@
         <option name="default">USER</option>
       </options>
     </field>
-    <field name="createdAt" type="datetime" column="created_at" nullable="true">
-      <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-      </options>
-    </field>
-    <field name="updatedAt" type="datetime" column="updated_at" nullable="true">
-      <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-      </options>
-    </field>
+    <field name="createdAt" type="datetime" column="created_at" nullable="true" />
+    <field name="updatedAt" type="datetime" column="updated_at" nullable="true" />
   </entity>
 </doctrine-mapping>
