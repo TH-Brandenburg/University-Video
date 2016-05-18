@@ -79,10 +79,16 @@
         <option name="default">REGISTERED</option>
       </options>
     </field>
-    <field name="role" type="string" column="role" nullable="false">
+    <field name="admin" type="boolean" column="admin" nullable="false">
       <options>
         <option name="fixed"/>
-        <option name="default">USER</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="lecturer" type="boolean" column="lecturer" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default">0</option>
       </options>
     </field>
     <field name="createdAt" type="datetime" column="created_at" nullable="true" />

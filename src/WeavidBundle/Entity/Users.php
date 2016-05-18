@@ -110,11 +110,18 @@ class Users implements AdvancedUserInterface, \Serializable
     private $loginType = 'REGISTERED';
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="role", type="string", nullable=false)
+     * @ORM\Column(name="admin", type="boolean", nullable=false)
      */
-    private $role = 'USER';
+    private $admin = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="lecturer", type="boolean", nullable=false)
+     */
+    private $lecturer = false;
 
     /**
      * @var \DateTime
@@ -470,27 +477,37 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set role
-     *
-     * @param string $role
-     *
-     * @return Users
+     * @return boolean
      */
-    public function setRole($role)
-    {
-        $this->role = $role;
+    public function isAdmin() {
+        return $this->admin;
+    }
 
+    /**
+     * @param boolean $admin
+     *
+     * @return $this
+     */
+    public function setAdmin( $admin ) {
+        $this->admin = $admin;
         return $this;
     }
 
     /**
-     * Get role
-     *
-     * @return string
+     * @return boolean
      */
-    public function getRole()
-    {
-        return $this->role;
+    public function isLecturer() {
+        return $this->lecturer;
+    }
+
+    /**
+     * @param boolean $lecturer
+     *
+     * @return Users
+     */
+    public function setLecturer( $lecturer ) {
+        $this->lecturer = $lecturer;
+        return $this;
     }
 
     /**
@@ -657,7 +674,15 @@ class Users implements AdvancedUserInterface, \Serializable
      */
     public function getRoles()
     {
-        return ['ROLE_'.$this->role];
+        $roles = ['ROLE_USER'];
+        if($this->isAdmin()){
+            $roles[] = 'ROLE_ADMIN';
+        }
+        if($this->isLecturer()){
+            $roles[] = 'ROLE_LECTURER';
+        }
+
+        return $roles;
     }
 
     /**
