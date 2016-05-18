@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Lecturers
  *
- * @ORM\Table(name="lecturers", indexes={@ORM\Index(name="LECTURERS_USER_ID", columns={"user_id"})})
+ * @ORM\Table(name="lecturer", indexes={@ORM\Index(name="LECTURERS_USER_ID", columns={"user_id"})})
  * @ORM\Entity
  */
-class Lecturers
+class Lecturer
 {
     /**
      * @var string
@@ -24,30 +24,30 @@ class Lecturers
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="lecturer_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $lecturerId;
+    private $id;
 
     /**
-     * @var \WeavidBundle\Entity\Users
+     * @var \WeavidBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
      */
     private $user;
@@ -55,7 +55,7 @@ class Lecturers
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Videos", mappedBy="lecturer")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="lecturer")
      */
     private $video;
 
@@ -73,7 +73,7 @@ class Lecturers
      *
      * @param string $name
      *
-     * @return Lecturers
+     * @return Lecturer
      */
     public function setName($name)
     {
@@ -95,14 +95,11 @@ class Lecturers
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return Lecturers
+     * @return Lecturer
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -119,14 +116,11 @@ class Lecturers
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return Lecturers
+     * @return Lecturer
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
 
@@ -145,19 +139,19 @@ class Lecturers
      *
      * @return integer
      */
-    public function getLecturerId()
+    public function getId()
     {
-        return $this->lecturerId;
+        return $this->id;
     }
 
     /**
      * Set user
      *
-     * @param \WeavidBundle\Entity\Users $user
+     * @param \WeavidBundle\Entity\User $user
      *
-     * @return Lecturers
+     * @return Lecturer
      */
-    public function setUser(\WeavidBundle\Entity\Users $user = null)
+    public function setUser(\WeavidBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -167,7 +161,7 @@ class Lecturers
     /**
      * Get user
      *
-     * @return \WeavidBundle\Entity\Users
+     * @return \WeavidBundle\Entity\User
      */
     public function getUser()
     {
@@ -177,11 +171,11 @@ class Lecturers
     /**
      * Add video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      *
-     * @return Lecturers
+     * @return Lecturer
      */
-    public function addVideo(\WeavidBundle\Entity\Videos $video)
+    public function addVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video[] = $video;
 
@@ -191,9 +185,9 @@ class Lecturers
     /**
      * Remove video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      */
-    public function removeVideo(\WeavidBundle\Entity\Videos $video)
+    public function removeVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video->removeElement($video);
     }

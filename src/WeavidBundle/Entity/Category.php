@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Categories
  *
- * @ORM\Table(name="categories", indexes={@ORM\Index(name="CATEGORIES_PARENT_FK", columns={"parent"})})
+ * @ORM\Table(name="category", indexes={@ORM\Index(name="CATEGORIES_PARENT_FK", columns={"parent"})})
  * @ORM\Entity
  */
-class Categories
+class Category
 {
     /**
      * @var string
@@ -24,28 +24,28 @@ class Categories
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="category_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $categoryId;
+    private $id;
 
     /**
-     * @var \WeavidBundle\Entity\Categories
+     * @var \WeavidBundle\Entity\Category
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Categories")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Category", inversedBy="children")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parent", referencedColumnName="category_id")
      * })
@@ -53,9 +53,16 @@ class Categories
     private $parent;
 
     /**
+     * @var \WeavidBundle\Entity\Category
+     *
+     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Category", mappedBy="parent")
+     */
+    private $children;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Videos", mappedBy="category")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="category")
      */
     private $video;
 
@@ -73,7 +80,7 @@ class Categories
      *
      * @param string $name
      *
-     * @return Categories
+     * @return Category
      */
     public function setName($name)
     {
@@ -95,14 +102,11 @@ class Categories
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return Categories
+     * @return Category
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -119,14 +123,11 @@ class Categories
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return Categories
+     * @return Category
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
 
@@ -145,19 +146,19 @@ class Categories
      *
      * @return integer
      */
-    public function getCategoryId()
+    public function getId()
     {
-        return $this->categoryId;
+        return $this->id;
     }
 
     /**
      * Set parent
      *
-     * @param \WeavidBundle\Entity\Categories $parent
+     * @param \WeavidBundle\Entity\Category $parent
      *
-     * @return Categories
+     * @return Category
      */
-    public function setParent(\WeavidBundle\Entity\Categories $parent = null)
+    public function setParent(\WeavidBundle\Entity\Category $parent = null)
     {
         $this->parent = $parent;
 
@@ -167,7 +168,7 @@ class Categories
     /**
      * Get parent
      *
-     * @return \WeavidBundle\Entity\Categories
+     * @return \WeavidBundle\Entity\Category
      */
     public function getParent()
     {
@@ -177,11 +178,11 @@ class Categories
     /**
      * Add video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      *
-     * @return Categories
+     * @return Category
      */
-    public function addVideo(\WeavidBundle\Entity\Videos $video)
+    public function addVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video[] = $video;
 
@@ -191,9 +192,9 @@ class Categories
     /**
      * Remove video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      */
-    public function removeVideo(\WeavidBundle\Entity\Videos $video)
+    public function removeVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video->removeElement($video);
     }

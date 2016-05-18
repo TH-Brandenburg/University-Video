@@ -5,7 +5,7 @@ namespace WeavidBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use WeavidBundle\Entity\Users;
+use WeavidBundle\Entity\User;
 use WeavidBundle\Form\RegistrationType;
 
 class SecurityController extends Controller
@@ -43,7 +43,7 @@ class SecurityController extends Controller
     public function registrationAction(Request $request)
     {
 
-        $user = new Users();
+        $user = new User();
 
         $form = $this->createForm(RegistrationType::class, $user);
 

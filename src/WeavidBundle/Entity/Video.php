@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Videos
  *
- * @ORM\Table(name="videos", indexes={@ORM\Index(name="OWNER_ID_IDX", columns={"owner_id"})})
+ * @ORM\Table(name="video", indexes={@ORM\Index(name="OWNER_ID_IDX", columns={"owner_id"})})
  * @ORM\Entity
  */
-class Videos
+class Video
 {
     /**
      * @var string
@@ -31,14 +31,14 @@ class Videos
      *
      * @ORM\Column(name="released", type="boolean", nullable=false)
      */
-    private $released = '1';
+    private $released = true;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="public", type="boolean", nullable=false)
      */
-    private $public = '1';
+    private $public = false;
 
     /**
      * @var string
@@ -66,14 +66,14 @@ class Videos
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var integer
@@ -82,14 +82,14 @@ class Videos
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $videoId;
+    private $id;
 
     /**
-     * @var \WeavidBundle\Entity\Users
+     * @var \WeavidBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="owner_id", referencedColumnName="user_id")
+     *   @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      * })
      */
     private $owner;
@@ -97,20 +97,20 @@ class Videos
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Playlists", mappedBy="video")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Playlist", mappedBy="video")
      */
     private $playlist;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Categories", inversedBy="video")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Category", inversedBy="video")
      * @ORM\JoinTable(name="video_categories",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="video_id")
+     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="category_id", referencedColumnName="category_id")
+     *     @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      *   }
      * )
      */
@@ -119,13 +119,13 @@ class Videos
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Lecturers", inversedBy="video")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Lecturer", inversedBy="video")
      * @ORM\JoinTable(name="video_lecturers",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="video_id")
+     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="lecturer_id", referencedColumnName="lecturer_id")
+     *     @ORM\JoinColumn(name="lecturer_id", referencedColumnName="id")
      *   }
      * )
      */
@@ -134,13 +134,13 @@ class Videos
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Tags", inversedBy="video")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Tag", inversedBy="video")
      * @ORM\JoinTable(name="video_tags",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="video_id")
+     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="tag_id", referencedColumnName="tag_id")
+     *     @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
      *   }
      * )
      */
@@ -163,7 +163,7 @@ class Videos
      *
      * @param string $title
      *
-     * @return Videos
+     * @return Video
      */
     public function setTitle($title)
     {
@@ -187,7 +187,7 @@ class Videos
      *
      * @param string $description
      *
-     * @return Videos
+     * @return Video
      */
     public function setDescription($description)
     {
@@ -211,7 +211,7 @@ class Videos
      *
      * @param boolean $released
      *
-     * @return Videos
+     * @return Video
      */
     public function setReleased($released)
     {
@@ -221,11 +221,11 @@ class Videos
     }
 
     /**
-     * Get released
+     * Is released
      *
      * @return boolean
      */
-    public function getReleased()
+    public function isReleased()
     {
         return $this->released;
     }
@@ -235,7 +235,7 @@ class Videos
      *
      * @param boolean $public
      *
-     * @return Videos
+     * @return Video
      */
     public function setPublic($public)
     {
@@ -245,11 +245,11 @@ class Videos
     }
 
     /**
-     * Get public
+     * Is public
      *
      * @return boolean
      */
-    public function getPublic()
+    public function isPublic()
     {
         return $this->public;
     }
@@ -259,7 +259,7 @@ class Videos
      *
      * @param string $primaryVideoUrl
      *
-     * @return Videos
+     * @return Video
      */
     public function setPrimaryVideoUrl($primaryVideoUrl)
     {
@@ -283,7 +283,7 @@ class Videos
      *
      * @param string $secondaryVideoUrl
      *
-     * @return Videos
+     * @return Video
      */
     public function setSecondaryVideoUrl($secondaryVideoUrl)
     {
@@ -307,7 +307,7 @@ class Videos
      *
      * @param string $subtitle
      *
-     * @return Videos
+     * @return Video
      */
     public function setSubtitle($subtitle)
     {
@@ -329,14 +329,11 @@ class Videos
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return Videos
+     * @return Video
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -353,14 +350,11 @@ class Videos
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return Videos
+     * @return Video
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
 
@@ -379,19 +373,19 @@ class Videos
      *
      * @return integer
      */
-    public function getVideoId()
+    public function getId()
     {
-        return $this->videoId;
+        return $this->id;
     }
 
     /**
      * Set owner
      *
-     * @param \WeavidBundle\Entity\Users $owner
+     * @param \WeavidBundle\Entity\User $owner
      *
-     * @return Videos
+     * @return Video
      */
-    public function setOwner(\WeavidBundle\Entity\Users $owner = null)
+    public function setOwner(\WeavidBundle\Entity\User $owner = null)
     {
         $this->owner = $owner;
 
@@ -401,7 +395,7 @@ class Videos
     /**
      * Get owner
      *
-     * @return \WeavidBundle\Entity\Users
+     * @return \WeavidBundle\Entity\User
      */
     public function getOwner()
     {
@@ -411,11 +405,11 @@ class Videos
     /**
      * Add playlist
      *
-     * @param \WeavidBundle\Entity\Playlists $playlist
+     * @param \WeavidBundle\Entity\Playlist $playlist
      *
-     * @return Videos
+     * @return Video
      */
-    public function addPlaylist(\WeavidBundle\Entity\Playlists $playlist)
+    public function addPlaylist(\WeavidBundle\Entity\Playlist $playlist)
     {
         $this->playlist[] = $playlist;
 
@@ -425,9 +419,9 @@ class Videos
     /**
      * Remove playlist
      *
-     * @param \WeavidBundle\Entity\Playlists $playlist
+     * @param \WeavidBundle\Entity\Playlist $playlist
      */
-    public function removePlaylist(\WeavidBundle\Entity\Playlists $playlist)
+    public function removePlaylist(\WeavidBundle\Entity\Playlist $playlist)
     {
         $this->playlist->removeElement($playlist);
     }
@@ -445,11 +439,11 @@ class Videos
     /**
      * Add category
      *
-     * @param \WeavidBundle\Entity\Categories $category
+     * @param \WeavidBundle\Entity\Category $category
      *
-     * @return Videos
+     * @return Video
      */
-    public function addCategory(\WeavidBundle\Entity\Categories $category)
+    public function addCategory(\WeavidBundle\Entity\Category $category)
     {
         $this->category[] = $category;
 
@@ -459,9 +453,9 @@ class Videos
     /**
      * Remove category
      *
-     * @param \WeavidBundle\Entity\Categories $category
+     * @param \WeavidBundle\Entity\Category $category
      */
-    public function removeCategory(\WeavidBundle\Entity\Categories $category)
+    public function removeCategory(\WeavidBundle\Entity\Category $category)
     {
         $this->category->removeElement($category);
     }
@@ -479,11 +473,11 @@ class Videos
     /**
      * Add lecturer
      *
-     * @param \WeavidBundle\Entity\Lecturers $lecturer
+     * @param \WeavidBundle\Entity\Lecturer $lecturer
      *
-     * @return Videos
+     * @return Video
      */
-    public function addLecturer(\WeavidBundle\Entity\Lecturers $lecturer)
+    public function addLecturer(\WeavidBundle\Entity\Lecturer $lecturer)
     {
         $this->lecturer[] = $lecturer;
 
@@ -493,9 +487,9 @@ class Videos
     /**
      * Remove lecturer
      *
-     * @param \WeavidBundle\Entity\Lecturers $lecturer
+     * @param \WeavidBundle\Entity\Lecturer $lecturer
      */
-    public function removeLecturer(\WeavidBundle\Entity\Lecturers $lecturer)
+    public function removeLecturer(\WeavidBundle\Entity\Lecturer $lecturer)
     {
         $this->lecturer->removeElement($lecturer);
     }
@@ -513,11 +507,11 @@ class Videos
     /**
      * Add tag
      *
-     * @param \WeavidBundle\Entity\Tags $tag
+     * @param \WeavidBundle\Entity\Tag $tag
      *
-     * @return Videos
+     * @return Video
      */
-    public function addTag(\WeavidBundle\Entity\Tags $tag)
+    public function addTag(\WeavidBundle\Entity\Tag $tag)
     {
         $this->tag[] = $tag;
 
@@ -527,9 +521,9 @@ class Videos
     /**
      * Remove tag
      *
-     * @param \WeavidBundle\Entity\Tags $tag
+     * @param \WeavidBundle\Entity\Tag $tag
      */
-    public function removeTag(\WeavidBundle\Entity\Tags $tag)
+    public function removeTag(\WeavidBundle\Entity\Tag $tag)
     {
         $this->tag->removeElement($tag);
     }

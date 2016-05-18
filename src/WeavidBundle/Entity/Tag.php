@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tags
  *
- * @ORM\Table(name="tags")
+ * @ORM\Table(name="tag")
  * @ORM\Entity
  */
-class Tags
+class Tag
 {
     /**
      * @var string
@@ -24,28 +24,28 @@ class Tags
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="tag_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $tagId;
+    private $id;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Videos", mappedBy="tag")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="tag")
      */
     private $video;
 
@@ -63,7 +63,7 @@ class Tags
      *
      * @param string $value
      *
-     * @return Tags
+     * @return Tag
      */
     public function setValue($value)
     {
@@ -85,14 +85,11 @@ class Tags
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return Tags
+     * @return Tag
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -109,17 +106,14 @@ class Tags
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return Tags
+     * @return Tag
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
-
+    
     /**
      * Get updatedAt
      *
@@ -135,19 +129,19 @@ class Tags
      *
      * @return integer
      */
-    public function getTagId()
+    public function getId()
     {
-        return $this->tagId;
+        return $this->id;
     }
 
     /**
      * Add video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      *
-     * @return Tags
+     * @return Tag
      */
-    public function addVideo(\WeavidBundle\Entity\Videos $video)
+    public function addVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video[] = $video;
 
@@ -157,9 +151,9 @@ class Tags
     /**
      * Remove video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      */
-    public function removeVideo(\WeavidBundle\Entity\Videos $video)
+    public function removeVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video->removeElement($video);
     }

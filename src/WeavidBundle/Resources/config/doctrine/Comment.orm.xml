@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="WeavidBundle\Entity\Comments" table="comments">
+  <entity name="WeavidBundle\Entity\Comment" table="comment">
     <indexes>
       <index name="VIDEO_ID_IDX" columns="video_id"/>
       <index name="CREATOR_ID_IDX" columns="creator_id"/>
     </indexes>
-    <id name="commentId" type="integer" column="comment_id">
+    <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
     <field name="text" type="text" column="text" length="65535" nullable="false">
@@ -23,24 +23,16 @@
         <option name="default">1</option>
       </options>
     </field>
-    <field name="createdAt" type="datetime" column="created_at" nullable="true">
-      <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-      </options>
-    </field>
-    <field name="updatedAt" type="datetime" column="updated_at" nullable="true">
-      <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-      </options>
-    </field>
-    <many-to-one field="creator" target-entity="Users" fetch="LAZY">
+    <field name="createdAt" type="datetime" column="created_at" nullable="true"/>
+    <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
+    <many-to-one field="creator" target-entity="User" fetch="LAZY">
       <join-columns>
-        <join-column name="creator_id" referenced-column-name="user_id"/>
+        <join-column name="creator_id" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="video" target-entity="Videos" fetch="LAZY">
+    <many-to-one field="video" target-entity="Video" fetch="LAZY">
       <join-columns>
-        <join-column name="video_id" referenced-column-name="video_id"/>
+        <join-column name="video_id" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
   </entity>

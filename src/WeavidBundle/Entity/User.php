@@ -8,10 +8,10 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 /**
  * Users
  *
- * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="EMAIL", columns={"email"})})
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="EMAIL", columns={"email"})})
  * @ORM\Entity
  */
-class Users implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var string
@@ -58,7 +58,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
      */
-    private $city = 'NONE';
+    private $city;
 
     /**
      * @var string
@@ -72,56 +72,63 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="degree", type="string", nullable=false)
      */
-    private $degree = 'NONE';
+    private $degree;
 
     /**
      * @var string
      *
      * @ORM\Column(name="job_status", type="string", nullable=false)
      */
-    private $jobStatus = 'NONE';
+    private $jobStatus;
 
     /**
      * @var string
      *
      * @ORM\Column(name="job_position", type="string", nullable=false)
      */
-    private $jobPosition = 'NONE';
+    private $jobPosition;
 
     /**
      * @var string
      *
      * @ORM\Column(name="job_experience", type="string", nullable=false)
      */
-    private $jobExperience = 'NONE';
+    private $jobExperience;
 
     /**
-     * @var string
+     * @var integer
      *
      * @ORM\Column(name="gender", type="string", nullable=false)
      */
-    private $gender = 'NONE';
+    private $gender;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="login_type", type="string", nullable=false)
+     * @ORM\Column(name="ldap", type="boolean", nullable=false)
      */
-    private $loginType = 'REGISTERED';
+    private $ldap = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="admin", type="boolean", nullable=false)
      */
-    private $admin = false;
+    private $admin = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="lecturer", type="boolean", nullable=false)
      */
-    private $lecturer = false;
+    private $lecturer = 0;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     */
+    private $enabled = 1;
 
     /**
      * @var \DateTime
@@ -140,20 +147,34 @@ class Users implements AdvancedUserInterface, \Serializable
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $userId;
+    private $id;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="owner_id")
+     */
+    private $videos;
 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->videos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set email
      *
      * @param string $email
      *
-     * @return Users
+     * @return User
      */
     public function setEmail($email)
     {
@@ -177,7 +198,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $password
      *
-     * @return Users
+     * @return User
      */
     public function setPassword($password)
     {
@@ -217,7 +238,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $firstName
      *
-     * @return Users
+     * @return User
      */
     public function setFirstName($firstName)
     {
@@ -241,7 +262,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $lastName
      *
-     * @return Users
+     * @return User
      */
     public function setLastName($lastName)
     {
@@ -265,7 +286,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $country
      *
-     * @return Users
+     * @return User
      */
     public function setCountry($country)
     {
@@ -289,7 +310,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $city
      *
-     * @return Users
+     * @return User
      */
     public function setCity($city)
     {
@@ -313,7 +334,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $organization
      *
-     * @return Users
+     * @return User
      */
     public function setOrganization($organization)
     {
@@ -337,7 +358,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $degree
      *
-     * @return Users
+     * @return User
      */
     public function setDegree($degree)
     {
@@ -361,7 +382,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $jobStatus
      *
-     * @return Users
+     * @return User
      */
     public function setJobStatus($jobStatus)
     {
@@ -385,7 +406,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $jobPosition
      *
-     * @return Users
+     * @return User
      */
     public function setJobPosition($jobPosition)
     {
@@ -409,7 +430,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @param string $jobExperience
      *
-     * @return Users
+     * @return User
      */
     public function setJobExperience($jobExperience)
     {
@@ -431,9 +452,9 @@ class Users implements AdvancedUserInterface, \Serializable
     /**
      * Set gender
      *
-     * @param string $gender
+     * @param integer $gender
      *
-     * @return Users
+     * @return User
      */
     public function setGender($gender)
     {
@@ -445,7 +466,7 @@ class Users implements AdvancedUserInterface, \Serializable
     /**
      * Get gender
      *
-     * @return string
+     * @return integer
      */
     public function getGender()
     {
@@ -453,30 +474,32 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set loginType
+     * Set ldap
      *
-     * @param string $loginType
+     * @param boolean $ldap
      *
-     * @return Users
+     * @return User
      */
-    public function setLoginType($loginType)
+    public function setLdap($ldap)
     {
-        $this->loginType = $loginType;
+        $this->ldap = $ldap;
 
         return $this;
     }
 
     /**
-     * Get loginType
+     * Is ldap
      *
-     * @return string
+     * @return boolean
      */
-    public function getLoginType()
+    public function isLdap()
     {
-        return $this->loginType;
+        return $this->ldap;
     }
 
     /**
+     * Is admin
+     *
      * @return boolean
      */
     public function isAdmin() {
@@ -484,6 +507,8 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * Set admin
+     *
      * @param boolean $admin
      *
      * @return $this
@@ -494,6 +519,8 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * Is lecturer
+     *
      * @return boolean
      */
     public function isLecturer() {
@@ -501,9 +528,11 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * Set lecturer
+     *
      * @param boolean $lecturer
      *
-     * @return Users
+     * @return User
      */
     public function setLecturer( $lecturer ) {
         $this->lecturer = $lecturer;
@@ -513,13 +542,14 @@ class Users implements AdvancedUserInterface, \Serializable
     /**
      * Set createdAt
      *
-     * @return Users
+     * @return User
      */
     public function setCreatedAt()
     {
-        $this->createdAt = $createdAt ?? new \DateTime();
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
+
     /**
      * Get createdAt
      *
@@ -529,16 +559,18 @@ class Users implements AdvancedUserInterface, \Serializable
     {
         return $this->createdAt;
     }
+
     /**
      * Set updatedAt
      *
-     * @return Users
+     * @return User
      */
-    public function setUpdatedAt()
+    public function setUpdatedAt($updatedAt = null)
     {
         $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
+
     /**
      * Get updatedAt
      *
@@ -550,13 +582,13 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get userId
+     * Get id
      *
      * @return integer
      */
-    public function getUserId()
+    public function getId()
     {
-        return $this->userId;
+        return $this->id;
     }
 
     /**
@@ -608,6 +640,17 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * @param boolean $enabled
+     *
+     * @return User
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    /**
      * Checks whether the user is enabled.
      *
      * Internally, if this method returns false, the authentication system
@@ -619,8 +662,7 @@ class Users implements AdvancedUserInterface, \Serializable
      */
     public function isEnabled()
     {
-        // TODO: Implement isEnabled() method.
-        return true;
+        return $this->enabled;
     }
 
     /**
@@ -632,7 +674,7 @@ class Users implements AdvancedUserInterface, \Serializable
     public function serialize()
     {
         return serialize([
-            $this->userId,
+            $this->id,
             $this->email,
             $this->password
         ]);
@@ -650,7 +692,7 @@ class Users implements AdvancedUserInterface, \Serializable
     public function unserialize($serialized)
     {
         list(
-            $this->userId,
+            $this->id,
             $this->email,
             $this->password
             ) = unserialize($serialized);

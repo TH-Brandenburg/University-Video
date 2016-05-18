@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Comments
  *
- * @ORM\Table(name="comments", indexes={@ORM\Index(name="VIDEO_ID_IDX", columns={"video_id"}), @ORM\Index(name="CREATOR_ID_IDX", columns={"creator_id"})})
+ * @ORM\Table(name="comment", indexes={@ORM\Index(name="VIDEO_ID_IDX", columns={"video_id"}), @ORM\Index(name="CREATOR_ID_IDX", columns={"creator_id"})})
  * @ORM\Entity
  */
-class Comments
+class Comment
 {
     /**
      * @var string
@@ -24,54 +24,54 @@ class Comments
      *
      * @ORM\Column(name="deleted", type="boolean", nullable=false)
      */
-    private $deleted = '1';
+    private $deleted = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="approved", type="boolean", nullable=false)
      */
-    private $approved = '1';
+    private $approved = true;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="comment_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $commentId;
+    private $id;
 
     /**
-     * @var \WeavidBundle\Entity\Users
+     * @var \WeavidBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator_id", referencedColumnName="user_id")
+     *   @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      * })
      */
     private $creator;
 
     /**
-     * @var \WeavidBundle\Entity\Videos
+     * @var \WeavidBundle\Entity\Video
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Videos")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Video")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="video_id", referencedColumnName="video_id")
+     *   @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      * })
      */
     private $video;
@@ -83,7 +83,7 @@ class Comments
      *
      * @param string $text
      *
-     * @return Comments
+     * @return Comment
      */
     public function setText($text)
     {
@@ -107,7 +107,7 @@ class Comments
      *
      * @param boolean $deleted
      *
-     * @return Comments
+     * @return Comment
      */
     public function setDeleted($deleted)
     {
@@ -117,11 +117,11 @@ class Comments
     }
 
     /**
-     * Get deleted
+     * Is deleted
      *
      * @return boolean
      */
-    public function getDeleted()
+    public function isDeleted()
     {
         return $this->deleted;
     }
@@ -131,7 +131,7 @@ class Comments
      *
      * @param boolean $approved
      *
-     * @return Comments
+     * @return Comment
      */
     public function setApproved($approved)
     {
@@ -141,11 +141,11 @@ class Comments
     }
 
     /**
-     * Get approved
+     * Is approved
      *
      * @return boolean
      */
-    public function getApproved()
+    public function isApproved()
     {
         return $this->approved;
     }
@@ -153,14 +153,11 @@ class Comments
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return Comments
+     * @return Comment
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -177,14 +174,11 @@ class Comments
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return Comments
+     * @return Comment
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
 
@@ -203,19 +197,19 @@ class Comments
      *
      * @return integer
      */
-    public function getCommentId()
+    public function getId()
     {
-        return $this->commentId;
+        return $this->id;
     }
 
     /**
      * Set creator
      *
-     * @param \WeavidBundle\Entity\Users $creator
+     * @param \WeavidBundle\Entity\User $creator
      *
-     * @return Comments
+     * @return Comment
      */
-    public function setCreator(\WeavidBundle\Entity\Users $creator = null)
+    public function setCreator(\WeavidBundle\Entity\User $creator = null)
     {
         $this->creator = $creator;
 
@@ -225,7 +219,7 @@ class Comments
     /**
      * Get creator
      *
-     * @return \WeavidBundle\Entity\Users
+     * @return \WeavidBundle\Entity\User
      */
     public function getCreator()
     {
@@ -235,11 +229,11 @@ class Comments
     /**
      * Set video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      *
-     * @return Comments
+     * @return Comment
      */
-    public function setVideo(\WeavidBundle\Entity\Videos $video = null)
+    public function setVideo(\WeavidBundle\Entity\Video $video = null)
     {
         $this->video = $video;
 
@@ -249,7 +243,7 @@ class Comments
     /**
      * Get video
      *
-     * @return \WeavidBundle\Entity\Videos
+     * @return \WeavidBundle\Entity\Video
      */
     public function getVideo()
     {

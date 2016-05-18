@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Playlists
  *
- * @ORM\Table(name="playlists", indexes={@ORM\Index(name="OWNER_ID_IDX", columns={"owner_id"})})
+ * @ORM\Table(name="playlist", indexes={@ORM\Index(name="OWNER_ID_IDX", columns={"owner_id"})})
  * @ORM\Entity
  */
-class Playlists
+class Playlist
 {
     /**
      * @var string
@@ -24,21 +24,21 @@ class Playlists
      *
      * @ORM\Column(name="private", type="boolean", nullable=false)
      */
-    private $private = '1';
+    private $private = true;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var integer
@@ -47,14 +47,14 @@ class Playlists
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $playlistId;
+    private $id;
 
     /**
-     * @var \WeavidBundle\Entity\Users
+     * @var \WeavidBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="owner_id", referencedColumnName="user_id")
+     *   @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      * })
      */
     private $owner;
@@ -62,13 +62,13 @@ class Playlists
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Videos", inversedBy="playlist")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Video", inversedBy="playlist")
      * @ORM\JoinTable(name="playlist_videos",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="playlist_id", referencedColumnName="playlist_id")
+     *     @ORM\JoinColumn(name="playlist_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="video_id")
+     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      *   }
      * )
      */
@@ -88,7 +88,7 @@ class Playlists
      *
      * @param string $name
      *
-     * @return Playlists
+     * @return Playlist
      */
     public function setName($name)
     {
@@ -112,7 +112,7 @@ class Playlists
      *
      * @param boolean $private
      *
-     * @return Playlists
+     * @return Playlist
      */
     public function setPrivate($private)
     {
@@ -122,11 +122,11 @@ class Playlists
     }
 
     /**
-     * Get private
+     * Is private
      *
      * @return boolean
      */
-    public function getPrivate()
+    public function isPrivate()
     {
         return $this->private;
     }
@@ -134,14 +134,11 @@ class Playlists
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return Playlists
+     * @return Playlist
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -158,17 +155,14 @@ class Playlists
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return Playlists
+     * @return Playlist
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
-
+    
     /**
      * Get updatedAt
      *
@@ -184,19 +178,19 @@ class Playlists
      *
      * @return integer
      */
-    public function getPlaylistId()
+    public function getId()
     {
-        return $this->playlistId;
+        return $this->id;
     }
 
     /**
      * Set owner
      *
-     * @param \WeavidBundle\Entity\Users $owner
+     * @param \WeavidBundle\Entity\User $owner
      *
-     * @return Playlists
+     * @return Playlist
      */
-    public function setOwner(\WeavidBundle\Entity\Users $owner = null)
+    public function setOwner(\WeavidBundle\Entity\User $owner = null)
     {
         $this->owner = $owner;
 
@@ -206,7 +200,7 @@ class Playlists
     /**
      * Get owner
      *
-     * @return \WeavidBundle\Entity\Users
+     * @return \WeavidBundle\Entity\User
      */
     public function getOwner()
     {
@@ -216,11 +210,11 @@ class Playlists
     /**
      * Add video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      *
-     * @return Playlists
+     * @return Playlist
      */
-    public function addVideo(\WeavidBundle\Entity\Videos $video)
+    public function addVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video[] = $video;
 
@@ -230,9 +224,9 @@ class Playlists
     /**
      * Remove video
      *
-     * @param \WeavidBundle\Entity\Videos $video
+     * @param \WeavidBundle\Entity\Video $video
      */
-    public function removeVideo(\WeavidBundle\Entity\Videos $video)
+    public function removeVideo(\WeavidBundle\Entity\Video $video)
     {
         $this->video->removeElement($video);
     }
