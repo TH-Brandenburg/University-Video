@@ -93,6 +93,6 @@
     </field>
     <field name="createdAt" type="datetime" column="created_at" nullable="true" />
     <field name="updatedAt" type="datetime" column="updated_at" nullable="true" />
-    <one-to-many target-entity="Video" mapped-by="owner_id" field="videos"/>
+    <one-to-many target-entity="Video" mapped-by="owner" field="videos"/>
   </entity>
 </doctrine-mapping>

@@ -45,7 +45,7 @@
     </field>
     <field name="createdAt" type="datetime" column="created_at" nullable="true"/>
     <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
-    <many-to-one field="owner" target-entity="User" fetch="LAZY">
+    <many-to-one field="owner" target-entity="User" fetch="LAZY" inversed-by="videos">
       <join-columns>
         <join-column name="owner_id" referenced-column-name="id"/>
       </join-columns>

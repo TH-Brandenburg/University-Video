@@ -3,14 +3,14 @@
 security:
 
     encoders:
-        WeavidBundle\Entity\Users:
+        WeavidBundle\Entity\User:
             algorithm: bcrypt
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         weavid_database_provider:
             entity:
-                class: WeavidBundle:Users
+                class: WeavidBundle:User
                 property: email
 
 

@@ -87,7 +87,7 @@ class Video
     /**
      * @var \WeavidBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User", inversedBy="videos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      * })

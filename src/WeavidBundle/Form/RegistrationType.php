@@ -2,6 +2,8 @@
 namespace WeavidBundle\Form;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -11,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationType extends AbstractType{
     /**
@@ -23,6 +26,13 @@ class RegistrationType extends AbstractType{
             'attr' => [
                 'placeholder' => 'mail@example.com',
                 'title' => 'Bitte verwenden Sie für die Registrierung keine E-Mailadresse der Hochschule.'
+            ],
+            'constraints' => [
+                new Regex([
+                    'pattern' => '/[a-zA-Z0-9\.]+@fh-brandenburg\.de$|[a-zA-Z0-9\.]+@th-brandenburg\.de$/',
+                    'match' => false,
+                    'message' => 'Für die Registrierung bitte keine Hochschuladresse verwenden.'
+                ])
             ]
         ]);
         $builder->add('plainPassword', RepeatedType::class, [
@@ -39,16 +49,43 @@ class RegistrationType extends AbstractType{
                 'label' => 'Passwort wiederholen'
             ]
         ]);
-        $builder->add('firstName', TextType::class);
-        $builder->add('lastName', TextType::class);
-        $builder->add('country', TextType::class);
-        $builder->add('city', TextType::class);
-        $builder->add('organization', TextType::class);
-        $builder->add('degree', TextType::class);
-        $builder->add('jobStatus', TextType::class);
-        $builder->add('jobPosition', TextType::class);
-        $builder->add('jobExperience', TextType::class);
-        $builder->add('gender', TextType::class);
+        $builder->add('firstName', TextType::class, [
+            'label' => 'Vorname'
+        ]);
+        $builder->add('lastName', TextType::class, [
+            'label' => 'Nachname'
+        ]);
+        $builder->add('gender', ChoiceType::class, [
+            'choices' => [
+                'Keine Angabe' => 0,
+                'Männlich' => 1,
+                'Weiblich' => 2,
+                'Sonstiges' => 9
+            ],
+            'label' => 'Geschlecht'
+        ]);
+        $builder->add('country', CountryType::class, [
+            'label' => 'Land',
+            'placeholder' => 'Bitte auswählen...'
+        ]);
+        $builder->add('city', TextType::class, [
+            'label' => 'Stadt'
+        ]);
+        $builder->add('organization', TextType::class, [
+            'label' => 'Organisation'
+        ]);
+        $builder->add('degree', TextType::class, [
+            'label' => 'Abschluss'
+        ]);
+        $builder->add('jobStatus', TextType::class, [
+            'label' => 'Berufsstatus'
+        ]);
+        $builder->add('jobPosition', TextType::class, [
+            'label' => 'Position'
+        ]);
+        $builder->add('jobExperience', TextType::class, [
+            'label' => 'Arbeitserfahrung'
+        ]);
         $builder->add('save', SubmitType::class, ['label' => 'Registrieren']);
     }
 
@@ -58,7 +95,7 @@ class RegistrationType extends AbstractType{
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'WeavidBundle\Entity\Users',
+            'data_class' => 'WeavidBundle\Entity\User',
             'constraints' => [
                 new UniqueEntity([
                     'fields' => ['email'],

@@ -156,7 +156,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="owner_id")
+     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="owner")
      */
     private $videos;
 
