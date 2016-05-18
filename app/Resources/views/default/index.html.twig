@@ -14,8 +14,12 @@
         <div class="row">
             <div class="col-xs-12">
                 <p>Hier finden Sie Video zu Lehrinhalten und darüber hinaus.</p>
-                <a href="{{ path('login') }}" class="btn btn-primary btn-xl">Anmelden</a>
-                <a href="{{ path('registration') }}" class="btn btn-primary btn-xl">Registrieren</a>
+                {% if is_granted('ROLE_USER') %}
+                    <a href="#" class="btn btn-primary btn-xl">Zu den Videos</a>
+                {% else %}
+                    <a href="{{ path('login') }}" class="btn btn-primary btn-xl">Anmelden</a>
+                    <a href="{{ path('registration') }}" class="btn btn-primary btn-xl">Registrieren</a>
+                {% endif %}
             </div>
         </div>
     </header>
