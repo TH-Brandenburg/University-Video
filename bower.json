@@ -8,7 +8,8 @@
     "respond": "1.4.2",
     "html5shiv": "3.7.3",
     "outdated-browser": "1.1.3",
-    "bootswatch": "3.*"
+    "bootswatch": "3.*",
+    "video-player": "https://github.com/openHPI/HTML5Player"
   },
   "private": true
 }

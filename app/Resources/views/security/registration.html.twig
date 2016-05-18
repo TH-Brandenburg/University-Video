@@ -6,15 +6,17 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Registrierung</h2>
-    <p>Bitte achten Sie bei Ihren Angaben auf Vollständigkeit und Korrektheit. Die Pflichtangaben wurden mit einem *
-        gekennzeichnet und sind für eine Antragstellung zwingend erforderlich.</p>
-    {{ form_start(form) }}
-    {% if not form.vars.valid %}
-        <div>{{ form_errors(form) }}</div>
-    {% endif %}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+    <div class="row">
+        <h2>Registrierung</h2>
+        <p>Bitte achten Sie bei Ihren Angaben auf Vollständigkeit und Korrektheit. Die Pflichtangaben wurden mit einem *
+            gekennzeichnet und sind für eine Antragstellung zwingend erforderlich.</p>
+        {{ form_start(form) }}
+        {% if not form.vars.valid %}
+            <div>{{ form_errors(form) }}</div>
+        {% endif %}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
 
 {% block stylesheets %}

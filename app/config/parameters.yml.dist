@@ -16,5 +16,10 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    # Vimeo
+    client_id:         ~
+    client_secret:     ~
+    access_token:      ~
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt

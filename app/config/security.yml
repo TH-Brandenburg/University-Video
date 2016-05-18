@@ -35,8 +35,7 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path: /
 
-#    access_control:
-#        - { path: ^/registration, allow_if: "!has_role('ROLE_USER')" }
-#        - { path: ^/forgot, allow_if: "!has_role('ROLE_USER')" }
-#        - { path: ^/verify, allow_if: "!has_role('ROLE_USER')" }
-#        - { path: ^/login, allow_if: "!has_role('ROLE_USER')" }
+    access_control:
+        - { path: ^/registration, allow_if: "!has_role('ROLE_USER')" }
+        - { path: ^/login, allow_if: "!has_role('ROLE_USER')" }
+        - { path: ^/videos/[0-9]+, allow_if: "true" }
