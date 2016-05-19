@@ -16,7 +16,13 @@ class VideoController extends Controller
      */
     public function videoIndexAction(Request $request)
     {
-        return $this->render('video/video-index.html.twig');
+
+        $em = $this->getDoctrine()->getManager();
+        $videos = $em->getRepository( 'WeavidBundle:Video' )->findAll();
+
+        return $this->render('video/video-index.html.twig', [
+            'videos' => $videos
+        ]);
     }
 
     /**
@@ -47,15 +53,44 @@ class VideoController extends Controller
     }
 
     /**
-     * @Route("/videos/{id}", name="videoIndex")
+     * @Route("/videos/{id}", name="videoPlayer")
      * @Security("video.isPublic() or (video.isReleased() and has_role('ROLE_USER'))")
      */
     public function videoPlayerAction(Request $request, Video $video)
     {
 
+        // Get Vimeo Service
+        $vimeo = $this->get('app.vimeo');
 
+        // Get Vimeo ID from URL
+        $primaryVideoRequestURL = '/videos'.parse_url($video->getPrimaryVideoUrl(), PHP_URL_PATH);
+        $secondaryVideoRequestURL = '/videos'.parse_url($video->getSecondaryVideoUrl(), PHP_URL_PATH);
 
-        return $this->render('video/video-index.html.twig');
+        // Make requests to Vimeo API
+        $primaryVideo = $vimeo->request($primaryVideoRequestURL, null, 'GET');
+        $secondaryVideo = $vimeo->request($secondaryVideoRequestURL, null, 'GET');
+
+        // Reorder response array
+        $files = $primaryVideo['body']['files'];
+        $primaryVideo['body']['files'] = [];
+        foreach($files as $file){
+            $quality = $file['quality'];
+            $primaryVideo['body']['files'][$quality] = $file;
+        }
+        $files = $secondaryVideo['body']['files'];
+        $secondaryVideo['body']['files'] = [];
+        foreach($files as $file){
+            $quality = $file['quality'];
+            $secondaryVideo['body']['files'][$quality] = $file;
+        }
+        unset($files);
+
+        // Return videoplayer page
+        return $this->render('video/videoplayer.html.twig', [
+            'video' => $video,
+            'primaryVideo' => $primaryVideo,
+            'secondaryVideo' => $secondaryVideo
+        ]);
     }
 
 }

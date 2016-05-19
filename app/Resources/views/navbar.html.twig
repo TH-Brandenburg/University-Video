@@ -16,7 +16,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if is_granted('ROLE_LECTURER') %}
                 <li>
-                    <a href="{{ path('videoAdd') }}">Video hinzufügen</a>
+                    <a href="{{ path('videoAdd') }}"><i class="fa fa-upload"></i> Video hinzufügen</a>
                 </li>
                 {% endif %}
                 {% if is_granted('ROLE_USER') %}

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Videos{% endblock %}
+
+{% block body %}
+
+    <h2></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <video-player id="weavidplayer" quality="hd" duration="{{ primaryVideo.body.duration }}">
+
+                <video-stream
+                    sd_src="{{ primaryVideo.body.files.sd.link_secure }}"
+                    hd_src="{{ primaryVideo.body.files.hd.link_secure }}"
+                    poster="{{ (primaryVideo.body.pictures.sizes|last).link }}">
+                </video-stream>
+
+                <video-stream
+                        sd_src="{{ secondaryVideo.body.files.sd.link_secure }}"
+                        hd_src="{{ secondaryVideo.body.files.hd.link_secure }}"
+                        poster="{{ (secondaryVideo.body.pictures.sizes|last).link }}">
+                </video-stream>
+
+            </video-player>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="well">
+                <strong>{{ video.title }}</strong>
+                <p>
+                    {{ video.description }}
+                </p>
+                <small>erstellt am {{ video.createdAt|date('d.m.Y') }}
+                    von {{ video.owner.firstName }} {{ video.owner.lastName }}</small>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/webcomponentsjs/webcomponents-lite.min.js"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="import" href="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/video-player/video-player.html">
+    <style type="text/css">
+        video-player {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
