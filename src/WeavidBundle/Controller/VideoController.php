@@ -6,7 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use WeavidBundle\Entity\Comment;
 use WeavidBundle\Entity\Video;
+use WeavidBundle\Form\CommentType;
 use WeavidBundle\Form\VideoType;
 
 class VideoController extends Controller
@@ -85,11 +87,18 @@ class VideoController extends Controller
         }
         unset($files);
 
+        $comment = new Comment();
+        $comment->setVideo($video);
+        $form = $this->createForm( CommentType::class, $comment, [
+            'action' => $this->generateUrl( 'newComment', [ 'id' => $video->getId() ] )
+        ]);
+
         // Return videoplayer page
         return $this->render('video/videoplayer.html.twig', [
             'video' => $video,
             'primaryVideo' => $primaryVideo,
-            'secondaryVideo' => $secondaryVideo
+            'secondaryVideo' => $secondaryVideo,
+            'commentForm' => $form->createView()
         ]);
     }
 

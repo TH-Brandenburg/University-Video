@@ -147,6 +147,15 @@ class Video
     private $tag;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Comment", inversedBy="video")
+     */
+    private $comment;
+
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -155,6 +164,7 @@ class Video
         $this->category = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lecturer = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comment = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -537,4 +547,23 @@ class Video
     {
         return $this->tag;
     }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection|Comment
+     */
+    public function getComment() {
+        return $this->comment;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\Collection $comment
+     *
+     * @return $this
+     */
+    public function setComment( $comment ) {
+        $this->comment = $comment;
+        return $this;
+    }
+
+
 }

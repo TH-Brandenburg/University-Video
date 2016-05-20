@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% form_theme commentForm 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block title %}Videos{% endblock %}
 
@@ -38,11 +39,51 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-12">
+            {% for comment in video.comment if comment.approved and not comment.deleted %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>{{ comment.creator.firstName }} {{ comment.creator.lastName }}</strong>
+                        am {{ comment.createdAt|date('d.m.Y H:i') }}
+                </div>
+                <div class="panel-body">
+                    {{ comment.text }}
+                </div>
+            </div>
+            {% endfor %}
+            {{ form_start(commentForm) }}
+            {% if not commentForm.vars.valid %}
+                <div>{{ form_errors(commentForm) }}</div>
+            {% endif %}
+            {{ form_widget(commentForm) }}
+            {{ form_end(commentForm) }}
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $form = $('form[name="comment"]');
+            $form.submit(function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    type: $form.attr('method'),
+                    url: $form.attr('action'),
+                    data: $form.serializeArray(),
+                    success: function(data){
+                        callback(data);
+                    }
+                });
+
+                return false;
+            })
+        });
+    </script>
 {% endblock %}
 
 {% block stylesheets %}

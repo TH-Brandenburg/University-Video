@@ -69,7 +69,7 @@ class Comment
     /**
      * @var \WeavidBundle\Entity\Video
      *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Video")
+     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Video", inversedBy="comments")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      * })
