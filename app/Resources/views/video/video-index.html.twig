@@ -3,7 +3,18 @@
 {% block title %}Videos{% endblock %}
 
 {% block body %}
-    <h2>Videos</h2>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <h2>Videos</h2>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+        {% if is_granted('ROLE_LECTURER') %}
+            <a class="btn btn-default pull-right" href="{{ path('videoAdd') }}">
+                <i class="fa fa-upload"></i> Video hinzufügen
+            </a>
+        {% endif %}
+        </div>
+    </div>
     <div class="row">
         {% for video in videos %}
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">

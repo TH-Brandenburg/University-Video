@@ -12,8 +12,42 @@ use WeavidBundle\Form\PlaylistVideoType;
 
 class PlaylistController extends Controller
 {
+
 	/**
-	 * @Route("/playlist/new", name="newPlaylist")
+	 * @Route("/playlists", name="indexPlaylist")
+	 * @Security("has_role('ROLE_USER')")
+	 */
+	public function indexAction(Request $request)
+	{
+
+		$em = $this->getDoctrine()->getEntityManager();
+		$qb = $em->createQueryBuilder();
+
+		// Query for all of the users playlists
+		$myPlaylists = $qb
+						->select('p')
+						->from('WeavidBundle:Playlist', 'p')
+						->where('p.owner = :owner')
+						->setParameter('owner', $this->get('security.token_storage')->getToken()->getUser())
+						->getQuery()->getResult();
+
+		// Query for all other playlists
+		$otherPlaylists = $qb
+						->where('p.owner != :owner')
+						->andWhere('p.private = 0')
+						->getQuery()->getResult();
+
+		// Return template with playlists
+		return $this->render('playlist/playlist-index.html.twig', [
+			'myPlaylists' => $myPlaylists,
+			'otherPlaylists' => $otherPlaylists
+		]);
+
+	}
+
+
+	/**
+	 * @Route("/playlists/new", name="newPlaylist")
 	 * @Security("has_role('ROLE_USER')")
 	 */
 	public function createAction(Request $request)
@@ -38,21 +72,26 @@ class PlaylistController extends Controller
 	}
 
 	/**
-	 * @Route("/playlist/{id}/edit", name="editPlaylist")
+	 * @Route("/playlists/{id}", name="showPlaylist")
+	 * @Security("has_role('ROLE_USER')")
+	 */
+	public function showPlaylistAction(Request $request, Playlist $playlist)
+	{
+		
+		return $this->render('playlist/show-playlist.html.twig', [
+			'playlist' => $playlist
+		]);
+		
+	}
+
+	/**
+	 * @Route("/playlists/{id}/edit", name="editPlaylist")
 	 * @Security("has_role('ROLE_USER')")
 	 */
 	public function editAction(Request $request, Playlist $playlist)
 	{
 
 		$em = $this->getDoctrine()->getEntityManager();
-
-		/*$qb = $em->createQueryBuilder();
-		$qb->select('v')
-			->from('WeavidBundle:Video', 'v')
-			->where('v.released = 1')
-			->orWhere('v.owner = :owner')
-			->setParameter('owner', $this->get( 'security.token_storage' )->getToken()->getUser());
-		$videos = $qb->getQuery()->getResult();*/
 
 		$form = $this->createForm( PlaylistVideoType::class, $playlist );
 		$form->handleRequest($request);
@@ -64,18 +103,10 @@ class PlaylistController extends Controller
 			$em->flush();
 		}
 
-
 		return $this->render('playlist/edit-playlist.html.twig', [
 			'playlist' => $playlist,
 			'form' => $form->createView()
 		]);
 	}
 
-	/**
-	 * @Route("/playlist/{id}/add", name="addToPlaylist")
-	 * @Security("has_role('ROLE_USER')")
-	 */
-	public function addToPlaylistAction(Request $request, Playlist $playlist){
-
-	}
 }

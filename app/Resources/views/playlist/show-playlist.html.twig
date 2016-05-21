@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ playlist.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <h1>{{ playlist.name }}</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="list-group">
+                {% for video in playlist.videos %}
+                    <a class="list-group-item" href="{{ path('videoPlayer', {'id': video.id}) }}">{{ video.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

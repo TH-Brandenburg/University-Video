@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Playlists{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <h2>Playlists</h2>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            {% if is_granted('ROLE_USER') %}
+                <a class="btn btn-default pull-right" href="{{ path('newPlaylist') }}">
+                    <i class="fa fa-list"></i> Playlist anlegen
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <h3>Meine Playlists</h3>
+    <div class="row">
+        {% for playlist in myPlaylists %}
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{{ path('showPlaylist', { id: playlist.id }) }}">{{ playlist.name }}</a>
+                    </div>
+                    <div class="panel-body">
+                        Videos in der Playlist: {{ playlist.videos|length }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-xs-12">Keine Einträge.</div>
+        {% endfor %}
+    </div>
+    <h3>Andere Playlists</h3>
+    <div class="row">
+        {% for playlist in otherPlaylists %}
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{{ path('videoPlayer', { id: playlist.id }) }}">{{ playlist.name }}</a>
+                    </div>
+                    <div class="panel-body">
+                        {{ video.description }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-xs-12">Keine Einträge.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

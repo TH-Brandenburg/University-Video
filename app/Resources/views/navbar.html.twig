@@ -14,14 +14,12 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                {% if is_granted('ROLE_LECTURER') %}
                 <li>
-                    <a href="{{ path('videoAdd') }}"><i class="fa fa-upload"></i> Video hinzufügen</a>
+                    <a href="{{ path('videoIndex') }}"><i class="fa fa-video-camera"></i> Videos</a>
                 </li>
-                {% endif %}
                 {% if is_granted('ROLE_USER') %}
                 <li>
-                    <a href="{{ path('newPlaylist') }}"><i class="fa fa-list"></i> Playlist anlegen</a>
+                    <a href="{{ path('indexPlaylist') }}"><i class="fa fa-list"></i> Playlists</a>
                 </li>
                 {% endif %}
                 {% if is_granted('ROLE_USER') %}
