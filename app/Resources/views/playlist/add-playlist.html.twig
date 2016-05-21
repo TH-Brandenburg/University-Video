@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}Playlist erstellen{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <h1>Playlist erstellen</h1>
+        <p>Hier können Sie eine Playlist erstellen.</p>
+        {{ form_start(form) }}
+        {% if not form.vars.valid %}
+            <div>{{ form_errors(form) }}</div>
+        {% endif %}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

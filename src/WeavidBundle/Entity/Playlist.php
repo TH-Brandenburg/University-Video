@@ -27,6 +27,13 @@ class Playlist
     private $private = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="course", type="boolean", nullable=false)
+     */
+    private $course = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
@@ -72,14 +79,14 @@ class Playlist
      *   }
      * )
      */
-    private $video;
+    private $videos;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->video = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->videos = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -129,6 +136,27 @@ class Playlist
     public function isPrivate()
     {
         return $this->private;
+    }
+
+    /**
+     * Is course
+     *
+     * @return boolean
+     */
+    public function isCourse() {
+        return $this->course;
+    }
+
+    /**
+     * Set course
+     *
+     * @param boolean $course
+     *
+     * @return Playlist
+     */
+    public function setCourse( $course ) {
+        $this->course = $course;
+        return $this;
     }
 
     /**
@@ -216,7 +244,7 @@ class Playlist
      */
     public function addVideo(\WeavidBundle\Entity\Video $video)
     {
-        $this->video[] = $video;
+        $this->videos[] = $video;
 
         return $this;
     }
@@ -228,7 +256,7 @@ class Playlist
      */
     public function removeVideo(\WeavidBundle\Entity\Video $video)
     {
-        $this->video->removeElement($video);
+        $this->videos->removeElement($video);
     }
 
     /**
@@ -236,8 +264,8 @@ class Playlist
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVideo()
+    public function getVideos()
     {
-        return $this->video;
+        return $this->videos;
     }
 }

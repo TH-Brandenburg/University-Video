@@ -3,6 +3,7 @@
 namespace WeavidBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ class CommentController extends Controller
 {
 	/**
 	 * @Route("/videos/{id}/comments/new", name="newComment")
+	 * @Security("has_role('ROLE_USER')")
 	 */
 	public function createAction(Request $request, Video $video)
 	{

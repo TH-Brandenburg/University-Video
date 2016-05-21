@@ -97,7 +97,7 @@ class Video
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Playlist", mappedBy="video")
+     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Playlist", mappedBy="videos")
      */
     private $playlist;
 
