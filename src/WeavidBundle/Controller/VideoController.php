@@ -55,6 +55,30 @@ class VideoController extends Controller
     }
 
     /**
+     * @Route("/videos/{id}/edit", name="videoEdit")
+     * @Security("video.isOwner(user)")
+     */
+    public function videoEditAction(Request $request, Video $video)
+    {
+
+        $form = $this->createForm( VideoType::class, $video );
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist( $video );
+            $em->flush();
+        }
+
+        return $this->render('video/edit-video.html.twig', [
+            'video' => $video,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/videos/{id}", name="videoPlayer")
      * @Security("video.isPublic() or (video.isReleased() and has_role('ROLE_USER'))")
      */

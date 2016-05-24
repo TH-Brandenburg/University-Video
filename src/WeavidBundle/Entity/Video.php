@@ -149,7 +149,7 @@ class Video
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Comment", inversedBy="video")
+     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Comment", mappedBy="video")
      */
     private $comment;
 
@@ -410,6 +410,18 @@ class Video
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * Is owner
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isOwner(\WeavidBundle\Entity\User $user = null)
+    {
+        return $user && $user->getId() == $this->getOwner()->getId();
     }
 
     /**

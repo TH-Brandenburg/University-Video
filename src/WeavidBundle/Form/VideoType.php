@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class VideoType extends AbstractType{
@@ -36,7 +38,19 @@ class VideoType extends AbstractType{
         $builder->add('secondaryVideoUrl', UrlType::class, [
             'label' => 'Video #2'
         ]);
-        $builder->add('save', SubmitType::class, ['label' => 'Video hinzufügen']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $video = $event->getData();
+            $form = $event->getForm();
+
+            // check if the Product object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Product"
+            if (!$video || null === $video->getId()) {
+                $form->add('save', SubmitType::class, ['label' => 'Video hinzufügen']);
+            } else {
+                $form->add('save', SubmitType::class, ['label' => 'Änderungen speichern']);
+            }
+        });
     }
 
     /**

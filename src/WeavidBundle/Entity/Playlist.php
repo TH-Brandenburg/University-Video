@@ -235,6 +235,11 @@ class Playlist
         return $this->owner;
     }
 
+    public function isOwner(\WeavidBundle\Entity\User $user = null)
+    {
+        return $user && $user->getId() == $this->getOwner()->getId();
+    }
+
     /**
      * Add video
      *

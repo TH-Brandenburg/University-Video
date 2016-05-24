@@ -27,38 +27,66 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
-            <div class="well">
-                <strong>{{ video.title }}</strong>
-                <p>
-                    {{ video.description }}
-                </p>
-                <small>erstellt am {{ video.createdAt|date('d.m.Y') }}
-                    von {{ video.owner.firstName }} {{ video.owner.lastName }}</small>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well">
+                        <strong>{{ video.title }}</strong>
+                        <p>
+                            {{ video.description }}
+                        </p>
+                        <p>
+                            <small>
+                                erstellt am {{ video.createdAt|date('d.m.Y') }}
+                                von {{ video.owner.firstName }} {{ video.owner.lastName }}
+                            </small>
+                        </p>
+                        <a class="btn btn-default btn-xs" href="{{ path('videoEdit', {'id': video.id }) }}">
+                            Bearbeiten
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    {% for comment in video.comment if comment.approved and not comment.deleted %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{{ comment.creator.firstName }} {{ comment.creator.lastName }}</strong>
+                                am {{ comment.createdAt|date('d.m.Y H:i') }}
+                        </div>
+                        <div class="panel-body">
+                            {{ comment.text }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {{ form_start(commentForm) }}
+                    {% if not commentForm.vars.valid %}
+                        <div>{{ form_errors(commentForm) }}</div>
+                    {% endif %}
+                    {{ form_widget(commentForm) }}
+                    {{ form_end(commentForm) }}
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            {% for comment in video.comment if comment.approved and not comment.deleted %}
+        <div class="col-xs-12 col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong>{{ comment.creator.firstName }} {{ comment.creator.lastName }}</strong>
-                        am {{ comment.createdAt|date('d.m.Y H:i') }}
+                    Playlisten mit diesem Video
                 </div>
                 <div class="panel-body">
-                    {{ comment.text }}
+                    <ul class="list-group">
+                    {% for playlist in video.playlist if playlist.isOwner(app.user) or playlist.private == 0 %}
+                        <a class="list-group-item"
+                           href="{{ path('showPlaylist', {'id': playlist.id}) }}">{{ playlist.name }}</a>
+                    {% endfor %}
+                    </ul>
                 </div>
             </div>
-            {% endfor %}
-            {{ form_start(commentForm) }}
-            {% if not commentForm.vars.valid %}
-                <div>{{ form_errors(commentForm) }}</div>
-            {% endif %}
-            {{ form_widget(commentForm) }}
-            {{ form_end(commentForm) }}
         </div>
+
     </div>
 
 {% endblock %}

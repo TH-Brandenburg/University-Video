@@ -5,7 +5,14 @@
 {% block body %}
 
     <div class="row">
-        <h1>{{ playlist.name }}</h1>
+        <div class="col-xs-12 col-sm-6">
+            <h1>{{ playlist.name }}</h1>
+        </div>
+        {% if playlist.isOwner(app.user) %}
+        <div class="col-xs-12 col-sm-6">
+            <a class="btn btn-default pull-right" href="{{ path('editPlaylist', { 'id': playlist.id }) }}">Bearbeiten</a>
+        </div>
+        {% endif %}
     </div>
 
     <div class="row">
