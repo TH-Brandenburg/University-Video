@@ -23,10 +23,10 @@ security:
         main:
             anonymous: ~
             pattern: ^/
-            form_login:
+            simple_form:
+                authenticator: simple_form_authenticator
+                check_path: login_check
                 login_path: login
-                check_path: login
-                require_previous_session: false
             provider: weavid_database_provider
             logout:
                 path: /logout
@@ -35,7 +35,7 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path: /
 
-    access_control:
-        - { path: ^/registration, allow_if: "!has_role('ROLE_USER')" }
-        - { path: ^/login, allow_if: "!has_role('ROLE_USER')" }
-        - { path: ^/videos/[0-9]+, allow_if: "true" }
+#    access_control:
+#        - { path: ^/registration, allow_if: "!has_role('ROLE_USER')" }
+#        - { path: ^/login, allow_if: "!has_role('ROLE_USER')" }
+#        - { path: ^/videos/[0-9]+, allow_if: "true" }

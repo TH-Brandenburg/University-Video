@@ -7,6 +7,9 @@ parameters:
 #    parameter_name: value
 
 services:
+    simple_form_authenticator:
+        class:  WeavidBundle\Security\SimpleFormAuthenticator
+        arguments: ["@security.password_encoder", "@doctrine.orm.entity_manager"]
     my.listener:
         class: WeavidBundle\EventListener\TimestampSubscriber
         tags:

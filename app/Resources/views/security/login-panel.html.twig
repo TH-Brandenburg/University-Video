@@ -6,7 +6,7 @@
         {% if error.message is defined %}<div class="alert alert-danger">
             {{ error.message|replace({'Bad credentials.' : 'Falscher Benutzername oder Passwort.'}) }}
             </div>{% endif %}
-        <form role="form" action="{{ path('login') }}" method="post">
+        <form role="form" action="{{ path('login_check') }}" method="post">
             <fieldset>
                 <div class="form-group">
                     <input class="form-control" placeholder="E-Mail" name="_username" type="email"

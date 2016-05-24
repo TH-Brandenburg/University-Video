@@ -30,6 +30,11 @@ class SecurityController extends Controller
     }
 
     /**
+     * @Route("/login_check", name="login_check")
+     */
+    public function loginCheckAction(Request $request){}
+
+    /**
      * @Route("/logout", name="logout")
      */
     public function logoutAction(Request $request)
