@@ -1,25 +1,17 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-
     encoders:
         WeavidBundle\Entity\User:
             algorithm: bcrypt
 
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         weavid_database_provider:
             entity:
                 class: WeavidBundle:User
                 property: email
 
-
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        #dev:
-        #    pattern: ^/(_(profiler|wdt)|css|images|js)/
-        #    security: false
-
         main:
             anonymous: ~
             pattern: ^/

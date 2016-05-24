@@ -4,9 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "243c6e88363bddfbf6182876c079bb39",
-    "content-hash": "f1548decac2967f3755865014f9f32aa",
+    "hash": "e663874f883d273f805260b4e9adee45",
+    "content-hash": "c48109dc5c0a8e200273a9abedda7cc2",
     "packages": [
+        {
+            "name": "adldap2/adldap2",
+            "version": "v6.0.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Adldap2/Adldap2.git",
+                "reference": "900fcc128547ee74860d2dca0259a5b19143fdbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/900fcc128547ee74860d2dca0259a5b19143fdbf",
+                "reference": "900fcc128547ee74860d2dca0259a5b19143fdbf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ldap": "*",
+                "illuminate/support": "~5.2",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.6.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Adldap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steve Bauman",
+                    "email": "steven_bauman@outlook.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP LDAP Package for Active Directory Manipulation.",
+            "keywords": [
+                "active directory",
+                "ad",
+                "adLDAP",
+                "adldap2",
+                "directory",
+                "ldap",
+                "windows"
+            ],
+            "time": "2016-05-17 16:04:17"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -960,6 +1012,104 @@
                 "youtube"
             ],
             "time": "2016-01-21 04:26:38"
+        },
+        {
+            "name": "illuminate/contracts",
+            "version": "v5.2.32",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/contracts.git",
+                "reference": "411b851962c211078ade7664a6976e77a78cd2a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/411b851962c211078ade7664a6976e77a78cd2a5",
+                "reference": "411b851962c211078ade7664a6976e77a78cd2a5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Contracts\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Contracts package.",
+            "homepage": "http://laravel.com",
+            "time": "2016-03-07 20:37:17"
+        },
+        {
+            "name": "illuminate/support",
+            "version": "v5.2.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/support.git",
+                "reference": "6749fab3f3d38d8b15427536a8e7bbdc57497c9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/6749fab3f3d38d8b15427536a8e7bbdc57497c9e",
+                "reference": "6749fab3f3d38d8b15427536a8e7bbdc57497c9e",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/inflector": "~1.0",
+                "ext-mbstring": "*",
+                "illuminate/contracts": "5.2.*",
+                "php": ">=5.5.9"
+            },
+            "suggest": {
+                "illuminate/filesystem": "Required to use the composer class (5.2.*).",
+                "jeremeamia/superclosure": "Required to be able to serialize closures (~2.2).",
+                "paragonie/random_compat": "Provides a compatible interface like PHP7's random_bytes() in PHP 5 projects (~1.1).",
+                "symfony/polyfill-php56": "Required to use the hash_equals function on PHP 5.5 (~1.0).",
+                "symfony/process": "Required to use the composer class (2.8.*|3.0.*).",
+                "symfony/var-dumper": "Improves the dd function (2.8.*|3.0.*)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Support\\": ""
+                },
+                "files": [
+                    "helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Support package.",
+            "homepage": "http://laravel.com",
+            "time": "2016-02-22 20:29:02"
         },
         {
             "name": "incenteev/composer-parameter-handler",

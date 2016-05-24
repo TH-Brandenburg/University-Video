@@ -21,5 +21,12 @@ parameters:
     client_secret:     ~
     access_token:      ~
 
+    # LDAP
+    ldap_host: ~
+    ldap_port: 389
+    ldap_version: 3
+    ldap_ssl: true
+    ldap_tls: false
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
