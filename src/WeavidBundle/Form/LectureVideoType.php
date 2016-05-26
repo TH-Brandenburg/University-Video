@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use WeavidBundle\Entity\Video;
 
-class PlaylistVideoType extends AbstractType{
+class LectureVideoType extends AbstractType{
 	/**
 	 * @param FormBuilderInterface $builder
 	 * @param array       $options
@@ -29,7 +29,7 @@ class PlaylistVideoType extends AbstractType{
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'WeavidBundle\Entity\Playlist',
+			'data_class' => 'WeavidBundle\Entity\Lecture',
 			'constraints' => [
 			]
 		));

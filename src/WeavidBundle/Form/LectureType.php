@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use WeavidBundle\Entity\Video;
 
-class PlaylistType extends AbstractType{
+class LectureType extends AbstractType{
 	/**
 	 * @param FormBuilderInterface $builder
 	 * @param array       $options
@@ -26,11 +26,7 @@ class PlaylistType extends AbstractType{
 			'label' => 'Privat',
 			'required' => false
 		]);
-		$builder->add('course', CheckboxType::class, [
-			'label' => 'Kurs',
-			'required' => false
-		]);
-		$builder->add('save', SubmitType::class, ['label' => 'Playlist anlegen']);
+		$builder->add('save', SubmitType::class, ['label' => 'Vorlesung anlegen']);
 	}
 
 	/**
@@ -39,7 +35,7 @@ class PlaylistType extends AbstractType{
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'WeavidBundle\Entity\Playlist',
+			'data_class' => 'WeavidBundle\Entity\Lecture',
 			'constraints' => [
 			]
 		));

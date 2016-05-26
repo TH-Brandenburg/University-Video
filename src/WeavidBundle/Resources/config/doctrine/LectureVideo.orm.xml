@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="WeavidBundle\Entity\LectureVideo" table="lecture_video">
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="private" type="boolean" column="private" nullable="false">
+            <options>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="createdAt" type="datetime" column="created_at" nullable="true"/>
+        <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
+        <many-to-one target-entity="Video" field="video" fetch="LAZY" inversed-by="lectureVideoAssociation">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-columns>
+                <join-column name="video_id" referenced-column-name="id" />
+            </join-columns>
+        </many-to-one>
+        <many-to-one target-entity="Lecture" field="lecture" fetch="LAZY" inversed-by="lectureVideoAssociation">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-columns>
+                <join-column name="lecture_id" referenced-column-name="id" />
+            </join-columns>
+        </many-to-one>
+        <one-to-one field="previousLectureVideo" target-entity="LectureVideo" inversed-by="nextLectureVideo">
+            <join-column name="previous_video_id" referenced-column-name="id" />
+        </one-to-one>
+        <one-to-one field="nextLectureVideo" target-entity="LectureVideo" mapped-by="previousLectureVideo" />
+    </entity>
+</doctrine-mapping>

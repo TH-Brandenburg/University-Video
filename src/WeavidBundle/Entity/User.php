@@ -2,28 +2,20 @@
 
 namespace WeavidBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * Users
- *
- * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="EMAIL", columns={"email"})})
- * @ORM\Entity
  */
 class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=120, nullable=false)
      */
     private $email;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
     private $password;
 
@@ -34,129 +26,91 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      */
     private $firstName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      */
     private $lastName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="country", type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="city", type="string", length=255, nullable=false)
      */
     private $city;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="organization", type="string", length=255, nullable=true)
      */
     private $organization;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="degree", type="string", nullable=false)
      */
     private $degree;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="job_status", type="string", nullable=false)
      */
     private $jobStatus;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="job_position", type="string", nullable=false)
      */
     private $jobPosition;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="job_experience", type="string", nullable=false)
      */
     private $jobExperience;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="gender", type="string", nullable=false)
      */
     private $gender;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="ldap", type="boolean", nullable=false)
      */
     private $ldap = 0;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="admin", type="boolean", nullable=false)
      */
     private $admin = 0;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="lecturer", type="boolean", nullable=false)
      */
     private $lecturer = 0;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled = 1;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="owner")
      */
     private $videos;
 

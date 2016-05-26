@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ lecture.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <h1>{{ lecture.name }}</h1>
+        </div>
+        {% if lecture.isOwner(app.user) %}
+        <div class="col-xs-12 col-sm-6">
+            <a class="btn btn-default pull-right" href="{{ path('editLecture', { 'id': lecture.id }) }}">Bearbeiten</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="list-group">
+                {% for lectureVideoAssociation in lecture.lectureVideoAssociation %}
+                    <a class="list-group-item" href="{{ path('videoPlayer', {'id': lectureVideoAssociation.video.id}) }}">{{ lectureVideoAssociation.video.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

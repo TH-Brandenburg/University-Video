@@ -2,77 +2,48 @@
 
 namespace WeavidBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Comments
- *
- * @ORM\Table(name="comment", indexes={@ORM\Index(name="VIDEO_ID_IDX", columns={"video_id"}), @ORM\Index(name="CREATOR_ID_IDX", columns={"creator_id"})})
- * @ORM\Entity
  */
 class Comment
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="text", type="text", length=65535, nullable=false)
      */
     private $text;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="deleted", type="boolean", nullable=false)
      */
     private $deleted = false;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="approved", type="boolean", nullable=false)
      */
     private $approved = true;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var \WeavidBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
-     * })
      */
     private $creator;
 
     /**
      * @var \WeavidBundle\Entity\Video
-     *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\Video", inversedBy="comments")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="video_id", referencedColumnName="id")
-     * })
      */
     private $video;
 

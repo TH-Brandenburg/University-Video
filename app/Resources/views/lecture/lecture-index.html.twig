@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Playlists{% endblock %}
+{% block title %}Vorlesungen{% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col-xs-12 col-sm-6">
-            <h2>Playlists</h2>
+            <h2>Vorlesungen</h2>
         </div>
         <div class="col-xs-12 col-sm-6">
             {% if is_granted('ROLE_USER') %}
-                <a class="btn btn-default pull-right" href="{{ path('newPlaylist') }}">
-                    <i class="fa fa-list"></i> Playlist anlegen
+                <a class="btn btn-default pull-right" href="{{ path('newLecture') }}">
+                    <i class="fa fa-list"></i> Vorlesung anlegen
                 </a>
             {% endif %}
         </div>
     </div>
-    <h3>Meine Playlists</h3>
+    <h3>Meine Vorlesungen</h3>
     <div class="row">
-        {% for playlist in myPlaylists %}
+        {% for lecture in myLectures %}
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="{{ path('showPlaylist', { id: playlist.id }) }}">{{ playlist.name }}</a>
+                        <a href="{{ path('showLecture', { id: lecture.id }) }}">{{ lecture.name }}</a>
                     </div>
                     <div class="panel-body">
-                        Videos in der Playlist: {{ playlist.videos|length }}
+                        Videos in der Playlist: {{ lecture.lectureVideoAssociation|length }}
                     </div>
                 </div>
             </div>
@@ -33,17 +33,17 @@
             <div class="col-xs-12">Keine Einträge.</div>
         {% endfor %}
     </div>
-    <h3>Andere Playlists</h3>
+    <h3>Andere Vorlesungen</h3>
     <div class="row">
-        {% for playlist in otherPlaylists %}
+        {% for lecture in otherLectures %}
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="{{ path('videoPlayer', { id: playlist.id }) }}">{{ playlist.name }}</a>
+                        <a href="{{ path('videoPlayer', { id: lecture.id }) }}">{{ lecture.name }}</a>
                     </div>
                     <div class="panel-body">
-                        {{ video.description }}
+                        {{ lecture.lectureVideoAssociation.description }}
                     </div>
                 </div>
             </div>

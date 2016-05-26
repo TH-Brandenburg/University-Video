@@ -2,50 +2,33 @@
 
 namespace WeavidBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Tags
- *
- * @ORM\Table(name="tag")
- * @ORM\Entity
  */
 class Tag
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="value", type="string", length=255, nullable=false)
      */
     private $value;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Video", mappedBy="tag")
      */
     private $video;
 

@@ -2,154 +2,88 @@
 
 namespace WeavidBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Videos
- *
- * @ORM\Table(name="video", indexes={@ORM\Index(name="OWNER_ID_IDX", columns={"owner_id"})})
- * @ORM\Entity
  */
 class Video
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     private $title;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="released", type="boolean", nullable=false)
      */
     private $released = true;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="public", type="boolean", nullable=false)
      */
     private $public = false;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="primary_video_url", type="string", length=255, nullable=false)
      */
     private $primaryVideoUrl;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="secondary_video_url", type="string", length=255, nullable=true)
      */
     private $secondaryVideoUrl;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="subtitle", type="string", length=255, nullable=true)
      */
     private $subtitle;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="video_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var \WeavidBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="WeavidBundle\Entity\User", inversedBy="videos")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
-     * })
      */
     private $owner;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Playlist", mappedBy="videos")
      */
-    private $playlist;
+    private $lectureVideoAssociation;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Category", inversedBy="video")
-     * @ORM\JoinTable(name="video_categories",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *   }
-     * )
      */
     private $category;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Lecturer", inversedBy="video")
-     * @ORM\JoinTable(name="video_lecturers",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="lecturer_id", referencedColumnName="id")
-     *   }
-     * )
      */
     private $lecturer;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="WeavidBundle\Entity\Tag", inversedBy="video")
-     * @ORM\JoinTable(name="video_tags",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="video_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
-     *   }
-     * )
      */
     private $tag;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="WeavidBundle\Entity\Comment", mappedBy="video")
      */
     private $comment;
 
@@ -160,11 +94,11 @@ class Video
      */
     public function __construct()
     {
-        $this->playlist = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->category = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->lecturer = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->comment = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lectureVideoAssociation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->category                = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lecturer                = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tag                     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comment                 = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -425,40 +359,6 @@ class Video
     }
 
     /**
-     * Add playlist
-     *
-     * @param \WeavidBundle\Entity\Playlist $playlist
-     *
-     * @return Video
-     */
-    public function addPlaylist(\WeavidBundle\Entity\Playlist $playlist)
-    {
-        $this->playlist[] = $playlist;
-
-        return $this;
-    }
-
-    /**
-     * Remove playlist
-     *
-     * @param \WeavidBundle\Entity\Playlist $playlist
-     */
-    public function removePlaylist(\WeavidBundle\Entity\Playlist $playlist)
-    {
-        $this->playlist->removeElement($playlist);
-    }
-
-    /**
-     * Get playlist
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPlaylist()
-    {
-        return $this->playlist;
-    }
-
-    /**
      * Add category
      *
      * @param \WeavidBundle\Entity\Category $category
@@ -578,4 +478,82 @@ class Video
     }
 
 
+
+    /**
+     * Get released
+     *
+     * @return boolean
+     */
+    public function getReleased()
+    {
+        return $this->released;
+    }
+
+    /**
+     * Get public
+     *
+     * @return boolean
+     */
+    public function getPublic()
+    {
+        return $this->public;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \WeavidBundle\Entity\Comment $comment
+     *
+     * @return Video
+     */
+    public function addComment(\WeavidBundle\Entity\Comment $comment)
+    {
+        $this->comment[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \WeavidBundle\Entity\Comment $comment
+     */
+    public function removeComment(\WeavidBundle\Entity\Comment $comment)
+    {
+        $this->comment->removeElement($comment);
+    }
+
+    /**
+     * Get playlist
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLectureVideoAssociation()
+    {
+        return $this->lectureVideoAssociation;
+    }
+
+    /**
+     * Add lectureVideoAssociation
+     *
+     * @param \WeavidBundle\Entity\LectureVideo $lectureVideoAssociation
+     *
+     * @return Video
+     */
+    public function addLectureVideoAssociation(\WeavidBundle\Entity\LectureVideo $lectureVideoAssociation)
+    {
+        $this->lectureVideoAssociation[] = $lectureVideoAssociation;
+
+        return $this;
+    }
+
+    /**
+     * Remove lectureVideoAssociation
+     *
+     * @param \WeavidBundle\Entity\LectureVideo $lectureVideoAssociation
+     */
+    public function removeLectureVideoAssociation(\WeavidBundle\Entity\LectureVideo $lectureVideoAssociation)
+    {
+        $this->lectureVideoAssociation->removeElement($lectureVideoAssociation);
+    }
 }
