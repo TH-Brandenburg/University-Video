@@ -12,6 +12,11 @@
                 <option name="fixed">1</option>
             </options>
         </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="fixed">1</option>
+            </options>
+        </field>
         <field name="published" type="boolean" column="published" nullable="false">
             <options>
                 <option name="default">1</option>

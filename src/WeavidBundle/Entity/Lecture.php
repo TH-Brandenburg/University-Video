@@ -13,6 +13,11 @@ class Lecture
     private $label;
 
     /**
+     * @var string
+     */
+    private $description;
+
+    /**
      * @var boolean
      */
     private $published = true;
@@ -77,6 +82,29 @@ class Lecture
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Lecture
+     */
+    public function setDescription( $description )
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
