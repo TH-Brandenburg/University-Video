@@ -8,21 +8,56 @@
     <h2></h2>
     <div class="row">
         <div class="col-xs-12">
-            <video-player id="weavidplayer" quality="hd" duration="{{ primaryVideo.body.duration }}">
-
-                <video-stream
-                    sd_src="{{ primaryVideo.body.files.sd.link_secure }}"
-                    hd_src="{{ primaryVideo.body.files.hd.link_secure }}"
-                    poster="{{ (primaryVideo.body.pictures.sizes|last).link }}">
-                </video-stream>
-
-                <video-stream
-                        sd_src="{{ secondaryVideo.body.files.sd.link_secure }}"
-                        hd_src="{{ secondaryVideo.body.files.hd.link_secure }}"
-                        poster="{{ (secondaryVideo.body.pictures.sizes|last).link }}">
-                </video-stream>
-
-            </video-player>
+            <div class="televideoplayer">
+                <div class="videoPlayer">
+                    <div class="videoPlayerInner">
+                        <div class="main clearfix">
+                            <div class="videoContainer speaker">
+                                <video class="speaker" autoplay>
+                                    <source src="{{ primaryVideo.body.files.hd.link_secure }}">
+                                </video>
+                                <div class="aspectRatio speaker">4:3</div>
+                            </div>
+                            <div class="videoContainer slides">
+                                <video class="slides" autoplay>
+                                    <source src="{{ secondaryVideo.body.files.hd.link_secure }}">
+                                </video>
+                                <div class="aspectRatio slides">4:3</div>
+                                <div id="link_overlay_container"></div>
+                            </div>
+                            <div class="resizer"></div>
+                        </div>
+                                            <div class="controlsBox">
+                        <div class="controls">
+                            <a class="play button pause"></a>
+                            <div class="controlsRight">
+                                <div class="timer">0:00</div>
+                                <a class="playbackRate button">1.0x</a>
+                                <div class="annotations_menu menu">
+                                    <ul>
+                                        <li class="toggle_wiki_links menu_item button">
+                                            Related articles
+                                        </li>
+                                        <li class="toggle_web_links button menu_item">
+                                            Links
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="annotations button" style="visibility:hidden">
+                                </div>
+                                <a class="chapter button"></a>
+                                <div class="volume-box clearfix">
+                                    <a class="mute button"></a>
+                                    <div class="sliding volume">
+                                        <div class="slider"></div>
+                                    </div>
+                                </div>
+                                <a class="fullscreen button"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -92,7 +127,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script type="text/javascript">var MEDIA_URL = "{{ app.request.getSchemeAndHttpHost() }}";</script>
+    <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/requirejs/require.js"></script>
+    <script src="{{ app.request.getSchemeAndHttpHost() }}/assets/js/televideoplayer.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function(){
             $form = $('form[name="comment"]');
@@ -115,10 +153,5 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="import" href="{{ app.request.getSchemeAndHttpHost() }}/assets/vendor/video-player/video-player.html">
-    <style type="text/css">
-        video-player {
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ app.request.getSchemeAndHttpHost() }}/assets/css/player.css">
 {% endblock %}
