@@ -15,7 +15,7 @@ class Course
     /**
      * @var boolean
      */
-    private $private = '1';
+    private $published = true;
 
     /**
      * @var \DateTime
@@ -35,7 +35,7 @@ class Course
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $course_lecture_association;
+    private $courseLectureAssociation;
 
     /**
      * @var \WeavidBundle\Entity\User
@@ -47,7 +47,7 @@ class Course
      */
     public function __construct()
     {
-        $this->course_lecture_association = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->courseLectureAssociation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -75,27 +75,27 @@ class Course
     }
 
     /**
-     * Set private
+     * Set published
      *
-     * @param boolean $private
+     * @param boolean $published
      *
      * @return Course
      */
-    public function setPrivate($private)
+    public function setPublished($published)
     {
-        $this->private = $private;
+        $this->published = $published;
 
         return $this;
     }
 
     /**
-     * Get private
+     * Get published
      *
      * @return boolean
      */
-    public function getPrivate()
+    public function isPublic()
     {
-        return $this->private;
+        return $this->published;
     }
 
     /**
@@ -165,7 +165,7 @@ class Course
      */
     public function addCourseLectureAssociation(\WeavidBundle\Entity\CourseLecture $courseLectureAssociation)
     {
-        $this->course_lecture_association[] = $courseLectureAssociation;
+        $this->courseLectureAssociation[] = $courseLectureAssociation;
 
         return $this;
     }
@@ -177,7 +177,7 @@ class Course
      */
     public function removeCourseLectureAssociation(\WeavidBundle\Entity\CourseLecture $courseLectureAssociation)
     {
-        $this->course_lecture_association->removeElement($courseLectureAssociation);
+        $this->courseLectureAssociation->removeElement($courseLectureAssociation);
     }
 
     /**
@@ -187,7 +187,7 @@ class Course
      */
     public function getCourseLectureAssociation()
     {
-        return $this->course_lecture_association;
+        return $this->courseLectureAssociation;
     }
 
     /**
@@ -213,10 +213,17 @@ class Course
     {
         return $this->owner;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $courseLectureAssociation;
 
+    /**
+     * Is owner
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isOwner(\WeavidBundle\Entity\User $user)
+    {
+        return $this->owner->getId() == $user->getId();
+    }
 
 }

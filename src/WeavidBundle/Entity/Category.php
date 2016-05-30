@@ -10,7 +10,7 @@ class Category
     /**
      * @var string
      */
-    private $name;
+    private $label;
 
     /**
      * @var \DateTime
@@ -52,27 +52,27 @@ class Category
 
 
     /**
-     * Set name
+     * Set label
      *
-     * @param string $name
+     * @param string $label
      *
      * @return Category
      */
-    public function setName($name)
+    public function setLabel($label)
     {
-        $this->name = $name;
+        $this->label = $label;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get label
      *
      * @return string
      */
-    public function getName()
+    public function getLabel()
     {
-        return $this->name;
+        return $this->label;
     }
 
     /**

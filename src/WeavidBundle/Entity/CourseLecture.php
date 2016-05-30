@@ -7,10 +7,6 @@ namespace WeavidBundle\Entity;
  */
 class CourseLecture
 {
-    /**
-     * @var boolean
-     */
-    private $private = '1';
 
     /**
      * @var \DateTime
@@ -42,30 +38,6 @@ class CourseLecture
      */
     private $lecture;
 
-
-    /**
-     * Set private
-     *
-     * @param boolean $private
-     *
-     * @return CourseLecture
-     */
-    public function setPrivate($private)
-    {
-        $this->private = $private;
-
-        return $this;
-    }
-
-    /**
-     * Get private
-     *
-     * @return boolean
-     */
-    public function getPrivate()
-    {
-        return $this->private;
-    }
 
     /**
      * Set createdAt

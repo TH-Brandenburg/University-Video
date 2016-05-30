@@ -34,7 +34,7 @@ class LectureController extends Controller
 		// Query for all other playlists
 		$otherLectures = $qb
 						->where('l.owner != :owner')
-						->andWhere('l.private = 0')
+						->andWhere('l.published = 1')
 						->getQuery()->getResult();
 
 		// Return template with lectures

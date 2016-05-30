@@ -10,12 +10,12 @@ class Lecture
     /**
      * @var string
      */
-    private $name;
+    private $label;
 
     /**
      * @var boolean
      */
-    private $private = true;
+    private $published = true;
 
     /**
      * @var \DateTime
@@ -56,51 +56,51 @@ class Lecture
     }
 
     /**
-     * Set name
+     * Set label
      *
-     * @param string $name
+     * @param string $label
      *
      * @return Lecture
      */
-    public function setName($name)
+    public function setLabel($label)
     {
-        $this->name = $name;
+        $this->label = $label;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get label
      *
      * @return string
      */
-    public function getName()
+    public function getLabel()
     {
-        return $this->name;
+        return $this->label;
     }
 
     /**
-     * Set private
+     * Set published
      *
-     * @param boolean $private
+     * @param boolean $published
      *
      * @return Lecture
      */
-    public function setPrivate($private)
+    public function setPublished($published)
     {
-        $this->private = $private;
+        $this->published = $published;
 
         return $this;
     }
 
     /**
-     * Get private
+     * Is published
      *
      * @return boolean
      */
-    public function getPrivate()
+    public function isPublished()
     {
-        return $this->private;
+        return $this->published;
     }
 
     /**

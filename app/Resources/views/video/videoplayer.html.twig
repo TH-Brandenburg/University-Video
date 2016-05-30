@@ -115,7 +115,7 @@
                     <ul class="list-group">
                     {% for lectureAssociation in video.lectureVideoAssociation if lectureAssociation.lecture.isOwner(app.user) or lectureAssociation.lecture.private == 0 %}
                         <a class="list-group-item"
-                           href="{{ path('showLecture', {'id': lectureAssociation.lecture.id}) }}">{{ lectureAssociation.lecture.name }}</a>
+                           href="{{ path('showLecture', {'id': lectureAssociation.lecture.id}) }}">{{ lectureAssociation.lecture.label }}</a>
                     {% endfor %}
                     </ul>
                 </div>

@@ -4,11 +4,6 @@
         <id name="id" type="integer" column="id">
             <generator strategy="IDENTITY"/>
         </id>
-        <field name="private" type="boolean" column="private" nullable="false">
-            <options>
-                <option name="default">1</option>
-            </options>
-        </field>
         <field name="createdAt" type="datetime" column="created_at" nullable="true"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
         <many-to-one target-entity="Video" field="video" fetch="LAZY" inversed-by="lectureVideoAssociation">

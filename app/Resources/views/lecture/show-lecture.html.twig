@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ lecture.name }}{% endblock %}
+{% block title %}{{ lecture.label }}{% endblock %}
 
 {% block body %}
 
     <div class="row">
         <div class="col-xs-12 col-sm-6">
-            <h1>{{ lecture.name }}</h1>
+            <h1>{{ lecture.label }}</h1>
         </div>
         {% if lecture.isOwner(app.user) %}
         <div class="col-xs-12 col-sm-6">

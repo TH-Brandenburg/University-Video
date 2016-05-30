@@ -12,7 +12,7 @@
                 <option name="fixed">1</option>
             </options>
         </field>
-        <field name="private" type="boolean" column="private" nullable="false">
+        <field name="published" type="boolean" column="published" nullable="false">
             <options>
                 <option name="default">1</option>
             </options>

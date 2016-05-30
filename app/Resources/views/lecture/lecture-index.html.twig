@@ -8,7 +8,7 @@
             <h2>Vorlesungen</h2>
         </div>
         <div class="col-xs-12 col-sm-6">
-            {% if is_granted('ROLE_USER') %}
+            {% if is_granted('ROLE_LECTURER') %}
                 <a class="btn btn-default pull-right" href="{{ path('newLecture') }}">
                     <i class="fa fa-list"></i> Vorlesung anlegen
                 </a>
@@ -22,7 +22,7 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="{{ path('showLecture', { id: lecture.id }) }}">{{ lecture.name }}</a>
+                        <a href="{{ path('showLecture', { id: lecture.id }) }}">{{ lecture.label }}</a>
                     </div>
                     <div class="panel-body">
                         Videos in der Playlist: {{ lecture.lectureVideoAssociation|length }}
@@ -40,7 +40,7 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="{{ path('videoPlayer', { id: lecture.id }) }}">{{ lecture.name }}</a>
+                        <a href="{{ path('videoPlayer', { id: lecture.id }) }}">{{ lecture.label }}</a>
                     </div>
                     <div class="panel-body">
                         {{ lecture.lectureVideoAssociation.description }}

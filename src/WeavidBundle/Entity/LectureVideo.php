@@ -7,10 +7,6 @@ namespace WeavidBundle\Entity;
  */
 class LectureVideo
 {
-    /**
-     * @var boolean
-     */
-    private $private = '1';
 
     /**
      * @var \DateTime
@@ -47,30 +43,6 @@ class LectureVideo
      */
     private $nextLectureVideo;
 
-
-    /**
-     * Set private
-     *
-     * @param boolean $private
-     *
-     * @return LectureVideo
-     */
-    public function setPrivate($private)
-    {
-        $this->private = $private;
-
-        return $this;
-    }
-
-    /**
-     * Get private
-     *
-     * @return boolean
-     */
-    public function getPrivate()
-    {
-        return $this->private;
-    }
 
     /**
      * Set createdAt
