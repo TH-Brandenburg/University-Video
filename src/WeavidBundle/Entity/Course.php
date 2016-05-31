@@ -121,7 +121,7 @@ class Course
      *
      * @return boolean
      */
-    public function isPublic()
+    public function isPublished()
     {
         return $this->published;
     }
@@ -129,14 +129,11 @@ class Course
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
      * @return Course
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -157,10 +154,9 @@ class Course
      *
      * @return Course
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
 
@@ -252,6 +248,23 @@ class Course
     public function isOwner(\WeavidBundle\Entity\User $user)
     {
         return $this->owner->getId() == $user->getId();
+    }
+
+
+	/**
+     * Add lecture to course
+     *
+     * @param Lecture $lecture
+     *
+     * @return $this
+     */
+    public function addLecture(\WeavidBundle\Entity\Lecture $lecture)
+    {
+        $newCourseLecture = new CourseLecture();
+        $newCourseLecture->setLecture($lecture);
+        $newCourseLecture->setCourse($this);
+        $this->addCourseLectureAssociation( $newCourseLecture );
+        return $this;
     }
 
 }

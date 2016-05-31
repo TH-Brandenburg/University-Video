@@ -46,10 +46,9 @@ class CourseLecture
      *
      * @return CourseLecture
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
+        $this->createdAt = $this->createdAt ?? new \DateTime();
         return $this;
     }
 
@@ -70,10 +69,9 @@ class CourseLecture
      *
      * @return CourseLecture
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = $updatedAt ?? new \DateTime();
         return $this;
     }
 

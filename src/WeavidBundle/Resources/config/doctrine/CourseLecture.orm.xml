@@ -7,11 +7,17 @@
         <field name="createdAt" type="datetime" column="created_at" nullable="true"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
         <many-to-one target-entity="Course" field="course" fetch="LAZY" inversed-by="courseLectureAssociation">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
             <join-columns>
                 <join-column name="course_id" referenced-column-name="id" />
             </join-columns>
         </many-to-one>
         <many-to-one target-entity="Lecture" field="lecture" fetch="LAZY" inversed-by="courseLectureAssociation">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
             <join-columns>
                 <join-column name="lecture_id" referenced-column-name="id" />
             </join-columns>
