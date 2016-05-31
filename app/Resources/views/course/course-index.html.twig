@@ -16,13 +16,40 @@
         </div>
     </div>
 
+    <h3>Meine Kurse</h3>
     <div class="row">
-        <div class="col-xs-12">
-            <div class="list-group">
-                {% for course in courses %}
-                <a href="{{ path('showCourse', {'id' : course.id }) }}" class="list-group-item">{{ course.label }}</a>
-                {% endfor %}
+        {% for course in myCourses %}
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{{ path('showCourse', { id: course.id }) }}">{{ course.label }}</a>
+                    </div>
+                    <div class="panel-body">
+                        Vorlesungen im Kurs: {{ course.courseLectureAssociation|length }}
+                    </div>
+                </div>
             </div>
-        </div>
+        {% else %}
+            <div class="col-xs-12">Keine Einträge.</div>
+        {% endfor %}
+    </div>
+    <h3>Andere Kurse</h3>
+    <div class="row">
+        {% for course in otherCourses %}
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{{ path('showCourse', { id: course.id }) }}">{{ course.label }}</a>
+                    </div>
+                    <div class="panel-body">
+                        {{ course.description }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-xs-12">Keine Einträge.</div>
+        {% endfor %}
     </div>
 {% endblock %}

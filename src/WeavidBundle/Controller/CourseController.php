@@ -14,6 +14,7 @@ class CourseController extends Controller
 {
 	/**
 	 * @Route("/courses", name="courseIndex")
+	 * @Security("has_role('ROLE_USER')")
 	 */
 	public function indexAction(Request $request)
 	{
@@ -21,17 +22,31 @@ class CourseController extends Controller
 		/** @var EntityManager $em */
 		$em = $this->getDoctrine()->getManager();
 
-		$courses = $em->getRepository( "WeavidBundle:Course" )->findBy([
-			'published' => true
-		]);
+		$qb = $em->createQueryBuilder();
+
+		// Query for all of the users courses
+		$myCourses = $qb
+			->select('c')
+			->from('WeavidBundle:Course', 'c')
+			->where('c.owner = :owner')
+			->setParameter('owner', $this->getUser())
+			->getQuery()->getResult();
+
+		// Query for all other courses
+		$otherCourses = $qb
+			->where('c.owner != :owner')
+			->andWhere('c.published = 1')
+			->getQuery()->getResult();
 
 		return $this->render('course/course-index.html.twig', [
-			'courses' => $courses
+			'myCourses' => $myCourses,
+			'otherCourses' => $otherCourses
 		]);
 	}
 
 	/**
 	 * @Route("/courses/add", name="createCourse")
+	 * @Security("has_role('ROLE_LECTURER')")
 	 */
 	public function createAction(Request $request)
 	{
@@ -56,6 +71,7 @@ class CourseController extends Controller
 
 	/**
 	 * @Route("/courses/{id}/edit", name="editCourse")
+	 * @Security("course.isOwner(user)")
 	 */
 	public function editAction(Request $request, \WeavidBundle\Entity\Course $course)
 	{
@@ -80,6 +96,7 @@ class CourseController extends Controller
 
 	/**
 	 * @Route("/courses/{id}", name="showCourse")
+	 * @Security("has_role('ROLE_USER') and course.isPublished() or course.isOwner(user)")
 	 */
 	public function showAction(Request $request, \WeavidBundle\Entity\Course $course)
 	{

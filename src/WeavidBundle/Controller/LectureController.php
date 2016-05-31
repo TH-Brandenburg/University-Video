@@ -2,6 +2,7 @@
 
 namespace WeavidBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,10 +21,11 @@ class LectureController extends Controller
 	public function indexAction(Request $request)
 	{
 
-		$em = $this->getDoctrine()->getEntityManager();
+		/** @var EntityManager $em */
+		$em = $this->getDoctrine()->getManager();
 		$qb = $em->createQueryBuilder();
 
-		// Query for all of the users playlists
+		// Query for all of the users lectures
 		$myLectures = $qb
 						->select('l')
 						->from('WeavidBundle:Lecture', 'l')
@@ -31,7 +33,7 @@ class LectureController extends Controller
 						->setParameter('owner', $this->get('security.token_storage')->getToken()->getUser())
 						->getQuery()->getResult();
 
-		// Query for all other playlists
+		// Query for all other lectures
 		$otherLectures = $qb
 						->where('l.owner != :owner')
 						->andWhere('l.published = 1')
@@ -73,7 +75,7 @@ class LectureController extends Controller
 
 	/**
 	 * @Route("/lectures/{id}", name="showLecture")
-	 * @Security("has_role('ROLE_USER')")
+	 * @Security("has_role('ROLE_USER') and lecture.isPublished() or lecture.isOwner(user)")
 	 */
 	public function showLectureAction(Request $request, Lecture $lecture)
 	{
@@ -86,7 +88,7 @@ class LectureController extends Controller
 
 	/**
 	 * @Route("/lectures/{id}/edit", name="editLecture")
-	 * @Security("has_role('ROLE_USER')")
+	 * @Security("has_role('ROLE_USER') and lecture.isOwner(user)")
 	 */
 	public function editAction(Request $request, Lecture $lecture)
 	{
