@@ -17,9 +17,32 @@
 
     <div class="row">
         <div class="col-xs-12">
+            <h2>Videos</h2>
+        </div>
+        <div class="col-xs-12">
             <div class="list-group">
                 {% for lectureVideoAssociation in lecture.lectureVideoAssociation %}
-                    <a class="list-group-item" href="{{ path('videoPlayer', {'id': lectureVideoAssociation.video.id}) }}">{{ lectureVideoAssociation.video.title }}</a>
+                    <a class="list-group-item"
+                       href="{{ path('videoPlayer', {'id': lectureVideoAssociation.video.id}) }}">
+                        {{ lectureVideoAssociation.video.title }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>In Kursen</h2>
+        </div>
+        <div class="col-xs-12">
+            <div class="list-group">
+                {% for courseLectureAssociation in lecture.courseLectureAssociation %}
+                    <a class="list-group-item"
+                       href="{{ path('showCourse', { 'id': courseLectureAssociation.course.id }) }}">
+                        {{ courseLectureAssociation.course.label }}
+                    </a>
                 {% endfor %}
             </div>
         </div>

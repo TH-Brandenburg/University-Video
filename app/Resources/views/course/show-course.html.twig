@@ -19,7 +19,10 @@
         <div class="col-xs-12">
             <div class="list-group">
                 {% for courseLectureAssociation in course.courseLectureAssociation %}
-                    <a class="list-group-item" href="{{ path('showLecture', {'id': courseLectureAssociation.lecture.id}) }}">{{ courseLectureAssociation.lecture.label }}</a>
+                    <a class="list-group-item" href="{{ path('showLecture', {'id': courseLectureAssociation.lecture.id}) }}">
+                        <span class="label label-default">{{ courseLectureAssociation.lecture.lectureVideoAssociation|length }}</span>
+                        {{ courseLectureAssociation.lecture.label }}
+                    </a>
                 {% endfor %}
             </div>
         </div>
