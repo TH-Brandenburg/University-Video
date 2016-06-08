@@ -16,7 +16,7 @@ class VideoController extends Controller
     /**
      * @Route("/videos", name="videoIndex")
      */
-    public function videoIndexAction(Request $request)
+    public function indexAction(Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -31,7 +31,7 @@ class VideoController extends Controller
      * @Route("/videos/add", name="videoAdd")
      * @Security("has_role('ROLE_LECTURER')")
      */
-    public function videoAddAction(Request $request)
+    public function createAction(Request $request)
     {
 
         $video = new Video();
@@ -58,7 +58,7 @@ class VideoController extends Controller
      * @Route("/videos/{id}/edit", name="videoEdit")
      * @Security("video.isOwner(user)")
      */
-    public function videoEditAction(Request $request, Video $video)
+    public function updateAction(Request $request, Video $video)
     {
 
         $form = $this->createForm( VideoType::class, $video );
@@ -82,7 +82,7 @@ class VideoController extends Controller
      * @Route("/videos/{id}", name="videoPlayer")
      * @Security("video.isPublic() or (video.isReleased() and has_role('ROLE_USER'))")
      */
-    public function videoPlayerAction(Request $request, Video $video)
+    public function playerAction(Request $request, Video $video)
     {
 
         // Get Vimeo Service
@@ -111,6 +111,7 @@ class VideoController extends Controller
         }
         unset($files);
 
+        // Comments form
         $comment = new Comment();
         $comment->setVideo($video);
         $form = $this->createForm( CommentType::class, $comment, [

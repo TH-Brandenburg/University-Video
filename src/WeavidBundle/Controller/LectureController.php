@@ -77,7 +77,7 @@ class LectureController extends Controller
 	 * @Route("/lectures/{id}", name="showLecture")
 	 * @Security("has_role('ROLE_USER') and lecture.isPublished() or lecture.isOwner(user)")
 	 */
-	public function showLectureAction(Request $request, Lecture $lecture)
+	public function showAction(Request $request, Lecture $lecture)
 	{
 		
 		return $this->render('lecture/show-lecture.html.twig', [
@@ -90,7 +90,7 @@ class LectureController extends Controller
 	 * @Route("/lectures/{id}/edit", name="editLecture")
 	 * @Security("has_role('ROLE_USER') and lecture.isOwner(user)")
 	 */
-	public function editAction(Request $request, Lecture $lecture)
+	public function updateAction(Request $request, Lecture $lecture)
 	{
 
 		$em = $this->getDoctrine()->getEntityManager();

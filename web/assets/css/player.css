@@ -30,8 +30,9 @@
   overflow:hidden;
   position:relative;
 
-  height:712px;
-  width:1152px;
+  /*height:712px;
+  width:1152px;*/
+  width: 100%;
 
   -webkit-user-select: none;
   -moz-user-select: none;

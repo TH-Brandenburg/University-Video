@@ -73,7 +73,7 @@ class CourseController extends Controller
 	 * @Route("/courses/{id}/edit", name="editCourse")
 	 * @Security("course.isOwner(user)")
 	 */
-	public function editAction(Request $request, \WeavidBundle\Entity\Course $course)
+	public function updateAction(Request $request, \WeavidBundle\Entity\Course $course)
 	{
 
 		$form = $this->createForm( CourseLectureType::class, $course );
