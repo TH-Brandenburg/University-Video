@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use WeavidBundle\Entity\Category;
 use WeavidBundle\Form\CategoryType;
+use WeavidBundle\Utils\CategoryVideos;
 
 class CategoryController extends Controller
 {
@@ -30,16 +31,22 @@ class CategoryController extends Controller
 								->getQuery()
 								->getResult();
 
+		// Create new instance of category
 		$category = new Category();
+		// Create category form and handle possible request
 		$form = $this->createForm( CategoryType::class, $category );
 		$form->handleRequest($request);
 
-		if($form->isSubmitted() && $form->isValid()){
+		// If the form was successfully submitted, is valid and the user is granted admin, persist category
+		if($form->isSubmitted() && $form->isValid() && $this->isGranted( 'ROLE_ADMIN' )){
 			$em->persist( $category );
 			$em->flush();
+			// add flash message if successful
+			$this->addFlash( 'success', 'Kategorie hinzugefügt.' );
 			return $this->redirectToRoute( 'categoryIndex' );
 		}
 
+		// Render category index with category form
 		return $this->render('category/category-index.html.twig', [
 			'form' => $form->createView(),
 			'rootCategories' => $rootCategories
@@ -64,19 +71,49 @@ class CategoryController extends Controller
 		                     ->getQuery()
 		                     ->getResult();
 
+		// Create category form and handle possible request
 		$form = $this->createForm( CategoryType::class, $category );
 		$form->handleRequest($request);
 
-		if($form->isSubmitted() && $form->isValid()){
+		// If the form was successfully submitted, is valid and the user is granted admin, persist category
+		if($form->isSubmitted() && $form->isValid() && $this->isGranted( 'ROLE_ADMIN' )){
 			$em->persist( $category );
 			$em->flush();
+			// add flash message if successful
+			$this->addFlash( 'success', 'Änderungen übernommen.' );
 			return $this->redirectToRoute( 'categoryIndex' );
 		}
 
+		// Render category index with category form
 		return $this->render('category/category-index.html.twig', [
 			'form' => $form->createView(),
 			'rootCategories' => $rootCategories
 		]);
+	}
+
+	/**
+	 * @Route("/categories/{id}/delete", name="categoryDelete")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function deleteAction(Request $request, Category $category)
+	{
+
+		if(!$category->hasChildren()){
+			// you are only able to remove a category, if there's no child entry
+			/** @var EntityManager $em */
+			$em = $this->getDoctrine()->getManager();
+			$em->remove( $category );
+			$em->flush();
+			// add flash message if successful
+			$this->addFlash( 'success', 'Kategorie entfernt.' );
+		} else {
+			// add flash message if unsuccessful
+			$this->addFlash('error', 'Bitte entfernen Sie zuerst alle Kindelemente.');
+		}
+
+		// redirect to category index
+		return $this->redirectToRoute( 'categoryIndex' );
+
 	}
 
 	/**
@@ -86,19 +123,11 @@ class CategoryController extends Controller
 	public function showAction(Request $request, Category $category)
 	{
 
-		$videos = [];
-		$videos = array_merge($videos, $category->getVideo()->toArray());
-		foreach($category->getChildren() as $firstLevelCategory)
-		{
-			$videos = array_merge($videos, $firstLevelCategory->getVideo()->toArray());
-			foreach($firstLevelCategory->getChildren() as $secondLevelCategory)
-			{
-				$videos = array_merge($videos, $secondLevelCategory->getVideo()->toArray());
-			}
-		}
-		$videos = array_unique( $videos );
-		
-		return $this->render('video/video-index.html.twig', [
+		// Call fetch video Utility method
+		$videos = CategoryVideos::fetchAllVideosInCategory( $category );
+
+		return $this->render('category/category-videos.html.twig', [
+			'category' => $category,
 			'videos' => $videos
 		]);
 

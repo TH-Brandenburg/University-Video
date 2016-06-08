@@ -196,4 +196,14 @@ class Category
     {
         return $this->children;
     }
+
+    /**
+     * Has children
+     *
+     * @return bool
+     */
+    public function hasChildren()
+    {
+        return $this->children !== null && !$this->children->isEmpty();
+    }
 }

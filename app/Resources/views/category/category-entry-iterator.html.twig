@@ -1,0 +1,22 @@
+{% for category in categories %}
+    <div class="list-group-item">
+        <div class="col-xs-offset-{{ level }}">
+            <a href="{{ path('categoryShow', {'id': category.id }) }}">
+                {{ category.label }}
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+            <div class="pull-right">
+                <a href="{{ path('categoryEdit', {'id': category.id }) }}" class="label label-success">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="{{ path('categoryDelete', {'id': category.id }) }}" class="label label-danger">
+                    <i class="fa fa-remove"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if category.hasChildren() %}
+        {% include 'category/category-entry-iterator.html.twig' with { 'categories': category.children, 'level': level+1 } %}
+    {% endif %}
+{% endfor %}
