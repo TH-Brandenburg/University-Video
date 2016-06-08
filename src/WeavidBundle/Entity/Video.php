@@ -43,6 +43,11 @@ class Video
     private $subtitle;
 
     /**
+     * @var string
+     */
+    private $languageTag;
+
+    /**
      * @var \DateTime
      */
     private $createdAt;
@@ -268,6 +273,27 @@ class Video
     public function getSubtitle()
     {
         return $this->subtitle;
+    }
+
+    /**
+     * Get language tag
+     *
+     * @return string
+     */
+    public function getLanguageTag() {
+        return $this->languageTag;
+    }
+
+    /**
+     * Set language tag
+     *
+     * @param string $languageTag
+     *
+     * @return Video
+     */
+    public function setLanguageTag( $languageTag ) {
+        $this->languageTag = $languageTag;
+        return $this;
     }
 
     /**
@@ -555,5 +581,9 @@ class Video
     public function removeLectureVideoAssociation(\WeavidBundle\Entity\LectureVideo $lectureVideoAssociation)
     {
         $this->lectureVideoAssociation->removeElement($lectureVideoAssociation);
+    }
+
+    public function __toString(){
+        return strval($this->getId());
     }
 }

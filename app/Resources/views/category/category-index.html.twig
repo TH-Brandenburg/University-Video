@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}Kategorien{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <h1>Kategorien</h1>
+        <h2>Übersicht</h2>
+        <div class="list-group">
+            {% for rootCategory in rootCategories %}
+                <div class="list-group-item">
+                    <span>
+                        <a href="{{ path('categoryShow', {'id': rootCategory.id }) }}">
+                            {{ rootCategory.label }}
+                        </a>
+                        <a href="{{ path('categoryEdit', {'id': rootCategory.id }) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </span>
+                </div>
+                {% for firstLevelCategory in rootCategory.children %}
+                    <div class="list-group-item">
+                        <span class="col-xs-offset-1">
+                            <a href="{{ path('categoryShow', {'id': firstLevelCategory.id }) }}">
+                                {{ firstLevelCategory.label }}
+                            </a>
+                            <a href="{{ path('categoryEdit', {'id': firstLevelCategory.id }) }}">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </span>
+                    </div>
+                    {% for secondLevelCategory in firstLevelCategory.children %}
+                        <div class="list-group-item">
+                            <span class="col-xs-offset-2">
+                                <a href="{{ path('categoryShow', {'id': secondLevelCategory.id }) }}">
+                                    {{ secondLevelCategory.label }}
+                                </a>
+                                <a href="{{ path('categoryEdit', {'id': secondLevelCategory.id }) }}">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <h2>Neue Kategorie</h2>
+        {{ form_start(form) }}
+        {% if not form.vars.valid %}
+            <div>{{ form_errors(form) }}</div>
+        {% endif %}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

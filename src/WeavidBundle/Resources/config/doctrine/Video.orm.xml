@@ -43,6 +43,12 @@
         <option name="comment">Subtitle in URL anpassen</option>
       </options>
     </field>
+    <field name="languageTag" type="string" column="language_tag" length="15" nullable="false">
+      <options>
+        <option name="fixed">1</option>
+        <option name="comment">Unicode Language Identifier für die Sprache des Videos.</option>
+      </options>
+    </field>
     <field name="createdAt" type="datetime" column="created_at" nullable="true"/>
     <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
     <many-to-one field="owner" target-entity="User" fetch="LAZY" inversed-by="videos">

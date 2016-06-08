@@ -1,7 +1,10 @@
 <?php
 namespace WeavidBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,6 +27,12 @@ class VideoType extends AbstractType{
         $builder->add('description', TextareaType::class, [
             'label' => 'Videobeschreibung'
         ]);
+        $builder->add('languageTag', LanguageType::class, [
+            'label' => 'Sprache',
+            'preferred_choices' => [
+                'de', 'en'
+            ]
+        ]);
         $builder->add('released', CheckboxType::class, [
             'label' => 'Freigegeben',
             'required' => false
@@ -38,13 +47,18 @@ class VideoType extends AbstractType{
         $builder->add('secondaryVideoUrl', UrlType::class, [
             'label' => 'Video #2'
         ]);
+        $builder->add('category', EntityType::class, [
+            'class' => 'WeavidBundle\Entity\Category',
+            'choice_label' => 'label',
+            'multiple' => true,
+            'expanded' => true,
+            'label' => 'Kategorien'
+        ]);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $video = $event->getData();
             $form = $event->getForm();
 
-            // check if the Product object is "new"
-            // If no data is passed to the form, the data is "null".
-            // This should be considered a new "Product"
+            // Check if video is new and add label depending on it
             if (!$video || null === $video->getId()) {
                 $form->add('save', SubmitType::class, ['label' => 'Video hinzufügen']);
             } else {

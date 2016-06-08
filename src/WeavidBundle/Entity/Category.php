@@ -1,6 +1,7 @@
 <?php
 
 namespace WeavidBundle\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Categories
@@ -33,7 +34,7 @@ class Category
     private $parent;
 
     /**
-     * @var \WeavidBundle\Entity\Category
+     * @var ArrayCollection
      */
     private $children;
 
@@ -48,6 +49,7 @@ class Category
     public function __construct()
     {
         $this->video = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -183,5 +185,15 @@ class Category
     public function getVideo()
     {
         return $this->video;
+    }
+
+    /**
+     * Get children
+     *
+     * @return ArrayCollection|Category
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }
