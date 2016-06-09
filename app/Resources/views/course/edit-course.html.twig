@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="list-group">
-                {% for courseLectureAssociation in course.courseLectureAssociation %}
+                {% for courseLectureAssociation in orderedCourseLectures %}
                     <div class="list-group-item">{{ courseLectureAssociation.lecture.label }}</div>
                 {% endfor %}
             </div>

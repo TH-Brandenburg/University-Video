@@ -26,7 +26,12 @@ class CourseLecture
     /**
      * @var \WeavidBundle\Entity\CourseLecture
      */
-    private $previous_lecture;
+    private $previousLecture;
+
+    /**
+     * @var \WeavidBundle\Entity\CourseLecture
+     */
+    private $nextLecture;
 
     /**
      * @var \WeavidBundle\Entity\Course
@@ -104,7 +109,7 @@ class CourseLecture
      */
     public function setPreviousLecture(\WeavidBundle\Entity\CourseLecture $previousLecture = null)
     {
-        $this->previous_lecture = $previousLecture;
+        $this->previousLecture = $previousLecture;
 
         return $this;
     }
@@ -116,7 +121,7 @@ class CourseLecture
      */
     public function getPreviousLecture()
     {
-        return $this->previous_lecture;
+        return $this->previousLecture;
     }
 
     /**
@@ -166,16 +171,6 @@ class CourseLecture
     {
         return $this->lecture;
     }
-    /**
-     * @var \WeavidBundle\Entity\CourseLecture
-     */
-    private $previousLecture;
-
-    /**
-     * @var \WeavidBundle\Entity\CourseLecture
-     */
-    private $nextLecture;
-
 
     /**
      * Set nextLecture

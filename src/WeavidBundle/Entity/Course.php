@@ -251,20 +251,5 @@ class Course
     }
 
 
-	/**
-     * Add lecture to course
-     *
-     * @param Lecture $lecture
-     *
-     * @return $this
-     */
-    public function addLecture(\WeavidBundle\Entity\Lecture $lecture)
-    {
-        $newCourseLecture = new CourseLecture();
-        $newCourseLecture->setLecture($lecture);
-        $newCourseLecture->setCourse($this);
-        $this->addCourseLectureAssociation( $newCourseLecture );
-        return $this;
-    }
 
 }
