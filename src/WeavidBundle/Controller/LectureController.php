@@ -66,6 +66,7 @@ class LectureController extends Controller
 			$em->persist( $lecture );
 			$em->flush();
 
+			$this->addFlash( 'success', 'Video hinzugefügt.' );
 			return $this->redirectToRoute( 'showLecture', ['id' => $lecture->getId()] );
 		}
 
@@ -92,6 +93,8 @@ class LectureController extends Controller
 		if($lectureDetailForm->isSubmitted() && $lectureDetailForm->isValid()){
 			$em->persist( $lecture );
 			$em->flush();
+			$this->addFlash( 'success', 'Änderungen übernommen.' );
+			return $this->redirectToRoute( 'editLecture', ['id'=>$lecture->getId()] );
 		}
 
 		// Create form to add videos to lecture
@@ -122,6 +125,9 @@ class LectureController extends Controller
 			// Persist lecture video
 			$em->persist( $lectureVideo );
 			$em->flush();
+
+			$this->addFlash( 'success', 'Video hinzugefügt.' );
+			return $this->redirectToRoute( 'editLecture', ['id'=>$lecture->getId()] );
 		}
 
 		$orderedLectureVideos = $this->getDoctrine()->getRepository( 'WeavidBundle:LectureVideo' )
@@ -238,6 +244,38 @@ class LectureController extends Controller
 		}
 
 		return $this->redirectToRoute( 'editLecture', [ 'id' => $lectureVideo->getLecture()->getId() ] );
+
+	}
+
+	/**
+	 * @Route("/lecturevideo/{id}/remove", name="removeLectureVideo")
+	 * @Security("has_role('ROLE_LECTURER') and lectureVideo.getLecture().isOwner(user)")
+	 */
+	public function removeLectureVideoAction(Request $request, LectureVideo $lectureVideo)
+	{
+
+		/** @var EntityManager $em */
+		$em = $this->getDoctrine()->getManager();
+		$em->getConnection()->beginTransaction();
+		$lecture = $lectureVideo->getLecture();
+
+		if($lectureVideo->hasNextLectureVideo()){
+			$nextLectureVideo = $lectureVideo->getNextLectureVideo();
+			$previousLectureVideo = $lectureVideo->getPreviousLectureVideo();
+			$lectureVideo->setPreviousLectureVideo(null);
+			$em->persist( $lectureVideo );
+			$em->flush();
+			$nextLectureVideo->setPreviousLectureVideo($previousLectureVideo);
+			$em->persist( $nextLectureVideo );
+		}
+
+		$em->remove( $lectureVideo );
+		$em->flush();
+
+		$em->commit();
+		$this->addFlash( 'success', 'Video aus Vorlesung entfernt.' );
+
+		return $this->redirectToRoute( 'editLecture', ['id' => $lecture->getId()] );
 
 	}
 
