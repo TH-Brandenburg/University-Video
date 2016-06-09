@@ -9,6 +9,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use WeavidBundle\Entity\Video;
 
@@ -30,7 +32,17 @@ class LectureType extends AbstractType{
 			'label' => 'Veröffentlicht',
 			'required' => false
 		]);
-		$builder->add('save', SubmitType::class, ['label' => 'Vorlesung anlegen']);
+		$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+			$lectures = $event->getData();
+			$form = $event->getForm();
+
+			// Check if lectures is new and add label depending on it
+			if (!$lectures || null === $lectures->getId()) {
+				$form->add('save', SubmitType::class, ['label' => 'Vorlesung anlegen']);
+			} else {
+				$form->add('save', SubmitType::class, ['label' => 'Änderungen speichern']);
+			}
+		});
 	}
 
 	/**

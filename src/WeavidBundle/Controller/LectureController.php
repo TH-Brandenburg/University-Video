@@ -85,11 +85,21 @@ class LectureController extends Controller
 		/** @var EntityManager $em */
 		$em = $this->getDoctrine()->getManager();
 
-		$form = $this->createForm( LectureVideoType::class, $lecture );
-		$form->handleRequest($request);
+		// Create form to edit lecture details
+		$lectureDetailForm = $this->createForm( LectureType::class, $lecture );
+		$lectureDetailForm->handleRequest($request);
 
-		if($form->isSubmitted() && $form->isValid()){
-			$video = $form->get('videos')->getData();
+		if($lectureDetailForm->isSubmitted() && $lectureDetailForm->isValid()){
+			$em->persist( $lecture );
+			$em->flush();
+		}
+
+		// Create form to add videos to lecture
+		$addVideoForm = $this->createForm( LectureVideoType::class, $lecture );
+		$addVideoForm->handleRequest($request);
+
+		if($addVideoForm->isSubmitted() && $addVideoForm->isValid()){
+			$video = $addVideoForm->get('videos')->getData();
 
 			$qb = $em->createQueryBuilder();
 
@@ -120,7 +130,8 @@ class LectureController extends Controller
 		return $this->render('lecture/edit-lecture.html.twig', [
 			'lecture' => $lecture,
 			'orderedLectureVideos' => $orderedLectureVideos,
-			'form' => $form->createView()
+			'addVideoForm' => $addVideoForm->createView(),
+			'lectureDetailForm' => $lectureDetailForm->createView()
 		]);
 	}
 

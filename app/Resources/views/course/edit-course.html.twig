@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme courseDetailForm 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme addLectureForm 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block title %}Kurs bearbeiten{% endblock %}
 
@@ -8,11 +9,12 @@
     <div class="row">
         <h1>Kurs bearbeiten</h1>
         <p>Hier können Sie die Kurse bearbeiten.</p>
-        <table class="table table-responsive">
-            <tr>
-                <th>Name</th><td>{{ course.label }}</td>
-            </tr>
-        </table>
+        {{ form_start(courseDetailForm) }}
+        {% if not courseDetailForm.vars.valid %}
+            <div>{{ form_errors(courseDetailForm) }}</div>
+        {% endif %}
+        {{ form_widget(courseDetailForm) }}
+        {{ form_end(courseDetailForm) }}
     </div>
 
     <div class="row">
@@ -37,12 +39,12 @@
                     </div>
                 {% endfor %}
             </div>
-            {{ form_start(form) }}
-            {% if not form.vars.valid %}
-                <div>{{ form_errors(form) }}</div>
+            {{ form_start(addLectureForm) }}
+            {% if not addLectureForm.vars.valid %}
+                <div>{{ form_errors(addLectureForm) }}</div>
             {% endif %}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+            {{ form_widget(addLectureForm) }}
+            {{ form_end(addLectureForm) }}
         </div>
     </div>
 

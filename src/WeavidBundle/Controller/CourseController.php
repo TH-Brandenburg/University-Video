@@ -77,14 +77,24 @@ class CourseController extends Controller
 	public function updateAction(Request $request, \WeavidBundle\Entity\Course $course)
 	{
 
-		$form = $this->createForm( CourseLectureType::class, $course );
-		$form->handleRequest($request);
-
 		/** @var EntityManager $em */
 		$em = $this->getDoctrine()->getManager();
 
-		if($form->isSubmitted() && $form->isValid()){
-			$lecture = $form->get('lectures')->getData();
+		// Create form to edit course details
+		$courseDetailForm = $this->createForm( CourseType::class, $course );
+		$courseDetailForm->handleRequest($request);
+
+		if($courseDetailForm->isSubmitted() && $courseDetailForm->isValid()){
+			$em->persist( $course );
+			$em->flush();
+		}
+
+		// Create form to add lectures to course
+		$addLectureForm = $this->createForm( CourseLectureType::class, $course );
+		$addLectureForm->handleRequest($request);
+
+		if($addLectureForm->isSubmitted() && $addLectureForm->isValid()){
+			$lecture = $addLectureForm->get('lectures')->getData();
 			$qb = $em->createQueryBuilder();
 
 			// Select last element in playlist
@@ -112,7 +122,8 @@ class CourseController extends Controller
 			->findByCourseOrderedBySequence( $course );
 
 		return $this->render('course/edit-course.html.twig', [
-			'form' => $form->createView(),
+			'addLectureForm' => $addLectureForm->createView(),
+			'courseDetailForm' => $courseDetailForm->createView(),
 			'orderedCourseLectures' => $orderedCourseLectures,
 			'course' => $course
 		]);

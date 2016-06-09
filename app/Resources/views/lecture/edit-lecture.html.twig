@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme lectureDetailForm 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme addVideoForm 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block title %}Vorlesung bearbeiten{% endblock %}
 
@@ -8,11 +9,12 @@
     <div class="row">
         <h1>Vorlesung bearbeiten</h1>
         <p>Hier können Sie die Vorlesung bearbeiten.</p>
-        <table class="table table-responsive">
-            <tr>
-                <th>Name</th><td>{{ lecture.label }}</td>
-            </tr>
-        </table>
+        {{ form_start(lectureDetailForm) }}
+        {% if not lectureDetailForm.vars.valid %}
+            <div>{{ form_errors(lectureDetailForm) }}</div>
+        {% endif %}
+        {{ form_widget(lectureDetailForm) }}
+        {{ form_end(lectureDetailForm) }}
     </div>
 
     <div class="row">
@@ -37,12 +39,12 @@
                     </div>
                 {% endfor %}
             </div>
-            {{ form_start(form) }}
-            {% if not form.vars.valid %}
-                <div>{{ form_errors(form) }}</div>
+            {{ form_start(addVideoForm) }}
+            {% if not addVideoForm.vars.valid %}
+                <div>{{ form_errors(addVideoForm) }}</div>
             {% endif %}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+            {{ form_widget(addVideoForm) }}
+            {{ form_end(addVideoForm) }}
         </div>
     </div>
 
