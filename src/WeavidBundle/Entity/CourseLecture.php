@@ -125,6 +125,16 @@ class CourseLecture
     }
 
     /**
+     * Has previousLecture
+     *
+     * @return bool
+     */
+    public function hasPreviousLecture()
+    {
+        return $this->getPreviousLecture() instanceof CourseLecture;
+    }
+
+    /**
      * Set course
      *
      * @param \WeavidBundle\Entity\Course $course
@@ -194,5 +204,15 @@ class CourseLecture
     public function getNextLecture()
     {
         return $this->nextLecture;
+    }
+
+    /**
+     * Has nextLecture
+     *
+     * @return bool
+     */
+    public function hasNextLecture()
+    {
+        return $this->getNextLecture() instanceof CourseLecture;
     }
 }

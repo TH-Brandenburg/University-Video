@@ -19,7 +19,22 @@
         <div class="col-xs-12">
             <div class="list-group">
                 {% for courseLectureAssociation in orderedCourseLectures %}
-                    <div class="list-group-item">{{ courseLectureAssociation.lecture.label }}</div>
+                    <div class="list-group-item">
+                        <span>
+                            {{ loop.index }} - {{ courseLectureAssociation.lecture.label }}
+                        </span>
+                        <div class="pull-right">
+                            <a class="btn btn-xs btn-default{% if loop.first %} disabled{% endif %}"
+                               href="{{ path('moveUpCourseLecture', {'id': courseLectureAssociation.id}) }}">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="btn btn-xs btn-default{% if loop.last %} disabled{% endif %}"
+                               href="{{ path('moveDownCourseLecture', {'id': courseLectureAssociation.id}) }}">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                            <a class="btn btn-xs btn-danger" href="#"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
             {{ form_start(form) }}

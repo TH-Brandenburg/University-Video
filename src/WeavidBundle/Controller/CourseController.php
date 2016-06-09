@@ -120,6 +120,112 @@ class CourseController extends Controller
 	}
 
 	/**
+	 * @Route("/courselecture/{id}/moveup", name="moveUpCourseLecture")
+	 * @Security("has_role('ROLE_LECTURER') and courseLecture.getCourse().isOwner(user)")
+	 */
+	public function moveUpAction(Request $request, CourseLecture $courseLecture)
+	{
+
+		// Check if video is already on first position
+		if($courseLecture->hasPreviousLecture()){
+
+			$oldPreviousCourseLecture = $courseLecture->getPreviousLecture();
+			$newPreviousCourseLecture = $oldPreviousCourseLecture->getPreviousLecture();
+			$oldNextCourseLecture = $courseLecture->getNextLecture();
+
+			/** @var EntityManager $em */
+			$em = $this->getDoctrine()->getManager();
+			$em->getConnection()->beginTransaction();
+
+			// Unset previous lecture videos to avoid integrity constraint violations
+			$oldPreviousCourseLecture->setPreviousLecture(null);
+			$courseLecture->setPreviousLecture(null);
+			$em->persist( $oldPreviousCourseLecture );
+			$em->persist( $courseLecture );
+			if($oldNextCourseLecture !== null){
+				$oldNextCourseLecture->setPreviousLecture(null);
+				$em->persist( $oldNextCourseLecture );
+			}
+			$em->flush();
+
+			// Set new previous lecture videos
+			$oldPreviousCourseLecture->setPreviousLecture($courseLecture);
+			$courseLecture->setPreviousLecture($newPreviousCourseLecture);
+			$em->persist( $oldPreviousCourseLecture );
+			$em->persist( $courseLecture );
+			if($oldNextCourseLecture !== null){
+				$oldNextCourseLecture->setPreviousLecture($oldPreviousCourseLecture);
+				$em->persist( $oldNextCourseLecture );
+			}
+			$em->flush();
+
+			// Commit changes
+			$em->commit();
+
+			$this->addFlash( 'success', 'Vorlesung erfolgreich verschoben.');
+		} else {
+			$this->addFlash( 'error', 'Vorlesung bereits an erster Stelle.' );
+		}
+
+		return $this->redirectToRoute( 'editCourse', [ 'id' => $courseLecture->getCourse()->getId() ] );
+
+	}
+
+	/**
+	 * @Route("/courselecture/{id}/movedown", name="moveDownCourseLecture")
+	 * @Security("has_role('ROLE_LECTURER') and courseLecture.getCourse().isOwner(user)")
+	 */
+	public function moveDownAction(Request $request, CourseLecture $courseLecture)
+	{
+
+		// Check if video is already on first position
+		if($courseLecture->hasNextLecture()){
+
+			$nextCourseLecture = $courseLecture->getNextLecture();
+
+			$oldPreviousCourseLecture = $nextCourseLecture->getPreviousLecture();
+			$newPreviousCourseLecture = $oldPreviousCourseLecture->getPreviousLecture();
+			$oldNextCourseLecture = $nextCourseLecture->getNextLecture();
+
+			/** @var EntityManager $em */
+			$em = $this->getDoctrine()->getManager();
+			$em->getConnection()->beginTransaction();
+
+			// Unset previous lecture videos to avoid integrity constraint violations
+			$oldPreviousCourseLecture->setPreviousLecture(null);
+			$nextCourseLecture->setPreviousLecture(null);
+			$em->persist( $oldPreviousCourseLecture );
+			$em->persist( $nextCourseLecture );
+			if($oldNextCourseLecture !== null){
+				$oldNextCourseLecture->setPreviousLecture(null);
+				$em->persist( $oldNextCourseLecture );
+			}
+			$em->flush();
+
+			// Set new previous lecture videos
+			$oldPreviousCourseLecture->setPreviousLecture($nextCourseLecture);
+			$nextCourseLecture->setPreviousLecture($newPreviousCourseLecture);
+			$em->persist( $oldPreviousCourseLecture );
+			$em->persist( $nextCourseLecture );
+			if($oldNextCourseLecture !== null){
+				$oldNextCourseLecture->setPreviousLecture($oldPreviousCourseLecture);
+				$em->persist( $oldNextCourseLecture );
+			}
+			$em->flush();
+
+			// Commit changes
+			$em->commit();
+
+			$this->addFlash( 'success', 'Vorlesung erfolgreich verschoben.');
+		} else {
+			$this->addFlash( 'error', 'Vorlesung bereits an letzter Stelle.' );
+		}
+
+		return $this->redirectToRoute( 'editCourse', [ 'id' => $courseLecture->getCourse()->getId() ] );
+
+	}
+
+	/**
 	 * @Route("/courses/{id}", name="showCourse")
 	 * @Security("has_role('ROLE_USER') and course.isPublished() or course.isOwner(user)")
 	 */
