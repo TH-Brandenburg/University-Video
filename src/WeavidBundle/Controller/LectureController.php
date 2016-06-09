@@ -74,18 +74,6 @@ class LectureController extends Controller
 		]);
 	}
 
-	/**
-	 * @Route("/lectures/{id}", name="showLecture")
-	 * @Security("has_role('ROLE_USER') and lecture.isPublished() or lecture.isOwner(user)")
-	 */
-	public function showAction(Request $request, Lecture $lecture)
-	{
-		
-		return $this->render('lecture/show-lecture.html.twig', [
-			'lecture' => $lecture
-		]);
-		
-	}
 
 	/**
 	 * @Route("/lectures/{id}/edit", name="editLecture")
@@ -107,13 +95,13 @@ class LectureController extends Controller
 
 			// Select last element in playlist
 			$previousLectureVideo = $qb->select('lv')
-				->from('WeavidBundle:LectureVideo', 'lv')
-				->where( 'lv.lecture = :lecture' )
-				->leftJoin( 'lv.nextLectureVideo', 'lv2')
-				->andWhere('lv2.id is NULL')
-				->setParameter( 'lecture', $lecture )
-				->setMaxResults( 1 )
-				->getQuery()->getOneOrNullResult();
+			                           ->from('WeavidBundle:LectureVideo', 'lv')
+			                           ->where( 'lv.lecture = :lecture' )
+			                           ->leftJoin( 'lv.nextLectureVideo', 'lv2')
+			                           ->andWhere('lv2.id is NULL')
+			                           ->setParameter( 'lecture', $lecture )
+			                           ->setMaxResults( 1 )
+			                           ->getQuery()->getOneOrNullResult();
 
 			// New lecture video object
 			$lectureVideo = new LectureVideo();
@@ -125,15 +113,134 @@ class LectureController extends Controller
 			$em->persist( $lectureVideo );
 			$em->flush();
 		}
-		
+
 		$orderedLectureVideos = $this->getDoctrine()->getRepository( 'WeavidBundle:LectureVideo' )
-			->findByLectureOrderedBySequence($lecture);
+		                             ->findByLectureOrderedBySequence($lecture);
 
 		return $this->render('lecture/edit-lecture.html.twig', [
 			'lecture' => $lecture,
 			'orderedLectureVideos' => $orderedLectureVideos,
 			'form' => $form->createView()
 		]);
+	}
+
+	/**
+	 * @Route("/lecturevideo/{id}/moveup", name="moveUpLectureVideo")
+	 * @Security("has_role('ROLE_LECTURER') and lectureVideo.getLecture().isOwner(user)")
+	 */
+	public function moveUpAction(Request $request, LectureVideo $lectureVideo)
+	{
+
+		// Check if video is already on first position
+		if($lectureVideo->hasPreviousLectureVideo()){
+
+			$oldPreviousLectureVideo = $lectureVideo->getPreviousLectureVideo();
+			$newPreviousLectureVideo = $oldPreviousLectureVideo->getPreviousLectureVideo();
+			$oldNextLectureVideo = $lectureVideo->getNextLectureVideo();
+
+			/** @var EntityManager $em */
+			$em = $this->getDoctrine()->getManager();
+			$em->getConnection()->beginTransaction();
+
+			// Unset previous lecture videos to avoid integrity constraint violations
+			$oldPreviousLectureVideo->setPreviousLectureVideo(null);
+			$lectureVideo->setPreviousLectureVideo(null);
+			$em->persist( $oldPreviousLectureVideo );
+			$em->persist( $lectureVideo );
+			if($oldNextLectureVideo !== null){
+				$oldNextLectureVideo->setPreviousLectureVideo(null);
+				$em->persist( $oldNextLectureVideo );
+			}
+			$em->flush();
+
+			// Set new previous lecture videos
+			$oldPreviousLectureVideo->setPreviousLectureVideo($lectureVideo);
+			$lectureVideo->setPreviousLectureVideo($newPreviousLectureVideo);
+			$em->persist( $oldPreviousLectureVideo );
+			$em->persist( $lectureVideo );
+			if($oldNextLectureVideo !== null){
+				$oldNextLectureVideo->setPreviousLectureVideo($oldPreviousLectureVideo);
+				$em->persist( $oldNextLectureVideo );
+			}
+			$em->flush();
+
+			// Commit changes
+			$em->commit();
+
+			$this->addFlash( 'success', 'Video erfolgreich verschoben.');
+		} else {
+			$this->addFlash( 'error', 'Video bereits an erster Stelle.' );
+		}
+
+		return $this->redirectToRoute( 'editLecture', [ 'id' => $lectureVideo->getLecture()->getId() ] );
+		
+	}
+
+	/**
+	 * @Route("/lecturevideo/{id}/movedown", name="moveDownLectureVideo")
+	 * @Security("has_role('ROLE_LECTURER') and lectureVideo.getLecture().isOwner(user)")
+	 */
+	public function moveDownAction(Request $request, LectureVideo $lectureVideo)
+	{
+
+		// Check if video is already on first position
+		if($lectureVideo->hasNextLectureVideo()){
+
+			$nextLectureVideo = $lectureVideo->getNextLectureVideo();
+
+			$oldPreviousLectureVideo = $nextLectureVideo->getPreviousLectureVideo();
+			$newPreviousLectureVideo = $oldPreviousLectureVideo->getPreviousLectureVideo();
+			$oldNextLectureVideo = $nextLectureVideo->getNextLectureVideo();
+
+			/** @var EntityManager $em */
+			$em = $this->getDoctrine()->getManager();
+			$em->getConnection()->beginTransaction();
+
+			// Unset previous lecture videos to avoid integrity constraint violations
+			$oldPreviousLectureVideo->setPreviousLectureVideo(null);
+			$nextLectureVideo->setPreviousLectureVideo(null);
+			$em->persist( $oldPreviousLectureVideo );
+			$em->persist( $nextLectureVideo );
+			if($oldNextLectureVideo !== null){
+				$oldNextLectureVideo->setPreviousLectureVideo(null);
+				$em->persist( $oldNextLectureVideo );
+			}
+			$em->flush();
+
+			// Set new previous lecture videos
+			$oldPreviousLectureVideo->setPreviousLectureVideo($nextLectureVideo);
+			$nextLectureVideo->setPreviousLectureVideo($newPreviousLectureVideo);
+			$em->persist( $oldPreviousLectureVideo );
+			$em->persist( $nextLectureVideo );
+			if($oldNextLectureVideo !== null){
+				$oldNextLectureVideo->setPreviousLectureVideo($oldPreviousLectureVideo);
+				$em->persist( $oldNextLectureVideo );
+			}
+			$em->flush();
+
+			// Commit changes
+			$em->commit();
+
+			$this->addFlash( 'success', 'Video erfolgreich verschoben.');
+		} else {
+			$this->addFlash( 'error', 'Video bereits an letzter Stelle.' );
+		}
+
+		return $this->redirectToRoute( 'editLecture', [ 'id' => $lectureVideo->getLecture()->getId() ] );
+
+	}
+
+	/**
+	 * @Route("/lectures/{id}", name="showLecture")
+	 * @Security("has_role('ROLE_USER') and lecture.isPublished() or lecture.isOwner(user)")
+	 */
+	public function showAction(Request $request, Lecture $lecture)
+	{
+		
+		return $this->render('lecture/show-lecture.html.twig', [
+			'lecture' => $lecture
+		]);
+		
 	}
 
 }

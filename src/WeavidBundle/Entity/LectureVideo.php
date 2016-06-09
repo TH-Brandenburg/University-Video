@@ -107,7 +107,7 @@ class LectureVideo
      */
     public function setPreviousLectureVideo(\WeavidBundle\Entity\LectureVideo $previousLectureVideo = null)
     {
-        if($this->getId() != $previousLectureVideo->getId()){
+        if($previousLectureVideo === null || $this->getId() != $previousLectureVideo->getId()){
             $this->previousLectureVideo = $previousLectureVideo;
         }
 
@@ -122,6 +122,16 @@ class LectureVideo
     public function getPreviousLectureVideo()
     {
         return $this->previousLectureVideo;
+    }
+
+    /**
+     * Has previousLectureVideo
+     *
+     * @return bool
+     */
+    public function hasPreviousLectureVideo()
+    {
+        return $this->getPreviousLectureVideo() instanceof LectureVideo;
     }
 
     /**
