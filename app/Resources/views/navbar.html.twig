@@ -32,6 +32,11 @@
                 {% endif %}
                 {% if is_granted('ROLE_USER') %}
                 <li>
+                    <a href="{{ path('profile') }}"><i class="fa fa-user"></i> Profil</a>
+                </li>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
+                <li>
                     <a href="{{ path('logout') }}"><i class="fa fa-sign-out"></i> Abmelden</a>
                 </li>
                 {% else %}

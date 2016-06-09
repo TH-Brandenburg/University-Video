@@ -14,6 +14,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use WeavidBundle\Form\Type\DegreeType;
+use WeavidBundle\Form\Type\GenderType;
+use WeavidBundle\Form\Type\JobExperienceType;
+use WeavidBundle\Form\Type\JobPositionType;
+use WeavidBundle\Form\Type\JobStatusType;
 
 class RegistrationType extends AbstractType{
     /**
@@ -55,15 +60,7 @@ class RegistrationType extends AbstractType{
         $builder->add('lastName', TextType::class, [
             'label' => 'Nachname'
         ]);
-        $builder->add('gender', ChoiceType::class, [
-            'choices' => [
-                'Keine Angabe' => 0,
-                'Männlich' => 1,
-                'Weiblich' => 2,
-                'Sonstiges' => 9
-            ],
-            'label' => 'Geschlecht'
-        ]);
+        $builder->add('gender', GenderType::class);
         $builder->add('country', CountryType::class, [
             'label' => 'Land',
             'placeholder' => 'Bitte auswählen...'
@@ -74,18 +71,10 @@ class RegistrationType extends AbstractType{
         $builder->add('organization', TextType::class, [
             'label' => 'Organisation'
         ]);
-        $builder->add('degree', TextType::class, [
-            'label' => 'Abschluss'
-        ]);
-        $builder->add('jobStatus', TextType::class, [
-            'label' => 'Berufsstatus'
-        ]);
-        $builder->add('jobPosition', TextType::class, [
-            'label' => 'Position'
-        ]);
-        $builder->add('jobExperience', TextType::class, [
-            'label' => 'Arbeitserfahrung'
-        ]);
+        $builder->add('degree', DegreeType::class);
+        $builder->add('jobStatus', JobStatusType::class);
+        $builder->add('jobPosition', JobPositionType::class);
+        $builder->add('jobExperience', JobExperienceType::class);
         $builder->add('save', SubmitType::class, ['label' => 'Registrieren']);
     }
 
