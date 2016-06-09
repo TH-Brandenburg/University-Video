@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="WeavidBundle\Entity\LectureVideo" table="lecture_video">
+    <entity name="WeavidBundle\Entity\LectureVideo" table="lecture_video" repository-class="WeavidBundle\Entity\LectureVideoRepository">
         <id name="id" type="integer" column="id">
             <generator strategy="IDENTITY"/>
         </id>
@@ -23,7 +23,7 @@
             </join-columns>
         </many-to-one>
         <one-to-one field="previousLectureVideo" target-entity="LectureVideo" inversed-by="nextLectureVideo">
-            <join-column name="previous_video_id" referenced-column-name="id" />
+            <join-column name="previous_lecture_video_id" referenced-column-name="id" />
         </one-to-one>
         <one-to-one field="nextLectureVideo" target-entity="LectureVideo" mapped-by="previousLectureVideo" />
     </entity>

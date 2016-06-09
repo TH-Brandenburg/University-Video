@@ -256,23 +256,6 @@ class Lecture
     }
 
     /**
-     * Add video
-     *
-     * @param Video $video
-     *
-     * @return $this
-     */
-    public function addVideo(\WeavidBundle\Entity\Video $video)
-    {
-        $newLectureVideo = new LectureVideo();
-        $newLectureVideo->setLecture($this);
-        $newLectureVideo->setVideo($video);
-        $newLectureVideo->setPreviousLectureVideo($newLectureVideo->getLastLectureVideo());
-        $this->addLectureVideoAssociation( $newLectureVideo );
-        return $this;
-    }
-
-    /**
      * Add lectureVideoAssociation
      *
      * @param \WeavidBundle\Entity\LectureVideo $lectureVideoAssociation

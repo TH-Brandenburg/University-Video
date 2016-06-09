@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use WeavidBundle\Entity\Lecture;
+use WeavidBundle\Entity\LectureVideo;
 use WeavidBundle\Form\LectureType;
 use WeavidBundle\Form\LectureVideoType;
 
@@ -93,20 +94,44 @@ class LectureController extends Controller
 	public function updateAction(Request $request, Lecture $lecture)
 	{
 
-		$em = $this->getDoctrine()->getEntityManager();
+		/** @var EntityManager $em */
+		$em = $this->getDoctrine()->getManager();
 
 		$form = $this->createForm( LectureVideoType::class, $lecture );
 		$form->handleRequest($request);
 
 		if($form->isSubmitted() && $form->isValid()){
 			$video = $form->get('videos')->getData();
-			$lecture->addVideo( $video );
-			$em->persist( $lecture );
+
+			$qb = $em->createQueryBuilder();
+
+			// Select last element in playlist
+			$previousLectureVideo = $qb->select('lv')
+				->from('WeavidBundle:LectureVideo', 'lv')
+				->where( 'lv.lecture = :lecture' )
+				->leftJoin( 'lv.nextLectureVideo', 'lv2')
+				->andWhere('lv2.id is NULL')
+				->setParameter( 'lecture', $lecture )
+				->setMaxResults( 1 )
+				->getQuery()->getOneOrNullResult();
+
+			// New lecture video object
+			$lectureVideo = new LectureVideo();
+			$lectureVideo->setLecture($lecture);
+			$lectureVideo->setVideo($video);
+			$lectureVideo->setPreviousLectureVideo($previousLectureVideo);
+
+			// Persist lecture video
+			$em->persist( $lectureVideo );
 			$em->flush();
 		}
+		
+		$orderedLectureVideos = $this->getDoctrine()->getRepository( 'WeavidBundle:LectureVideo' )
+			->findByLectureOrderedBySequence($lecture);
 
 		return $this->render('lecture/edit-lecture.html.twig', [
 			'lecture' => $lecture,
+			'orderedLectureVideos' => $orderedLectureVideos,
 			'form' => $form->createView()
 		]);
 	}
