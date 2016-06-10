@@ -2,6 +2,7 @@
 
 namespace WeavidBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,9 +20,26 @@ class VideoController extends Controller
     public function indexAction(Request $request)
     {
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $videos = $em->getRepository( 'WeavidBundle:Video' )->findAll();
+        $qb = $em->createQueryBuilder();
 
+        // Get all videos released
+        $qb->select('v')->from('WeavidBundle:Video', 'v')
+            ->where('v.released = 1');
+        if($this->isGranted('ROLE_USER')){
+            // Or owned if user
+            $qb->orWhere('v.owner = :user')
+                ->setParameter('user', $this->getUser());
+        } else {
+            // And public if not logged in
+            $qb->andWhere('v.public = 1');
+        }
+
+        // Result into variable
+        $videos = $qb->getQuery()->getResult();
+
+        // Render template
         return $this->render('video/video-index.html.twig', [
             'videos' => $videos
         ]);
