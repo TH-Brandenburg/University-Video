@@ -245,7 +245,7 @@ class Course
      *
      * @return bool
      */
-    public function isOwner(\WeavidBundle\Entity\User $user)
+    public function isOwner($user)
     {
         return $this->owner->getId() == $user->getId();
     }

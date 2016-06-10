@@ -379,7 +379,7 @@ class Video
      *
      * @return bool
      */
-    public function isOwner(\WeavidBundle\Entity\User $user = null)
+    public function isOwner($user = null)
     {
         return $user && $user->getId() == $this->getOwner()->getId();
     }

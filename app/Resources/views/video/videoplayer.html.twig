@@ -127,7 +127,7 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                    {% for lectureAssociation in video.lectureVideoAssociation if lectureAssociation.lecture.isOwner(app.user) or lectureAssociation.lecture.private == 0 %}
+                    {% for lectureAssociation in video.lectureVideoAssociation if lectureAssociation.lecture.isOwner(app.user) %}
                         <a class="list-group-item"
                            href="{{ path('showLecture', {'id': lectureAssociation.lecture.id}) }}">{{ lectureAssociation.lecture.label }}</a>
                     {% endfor %}
