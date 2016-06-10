@@ -90,9 +90,11 @@
                                 von {{ video.owner.firstName }} {{ video.owner.lastName }}
                             </small>
                         </p>
+                        {% if video.isOwner(app.user) %}
                         <a class="btn btn-default btn-xs" href="{{ path('videoEdit', {'id': video.id }) }}">
                             Bearbeiten
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
