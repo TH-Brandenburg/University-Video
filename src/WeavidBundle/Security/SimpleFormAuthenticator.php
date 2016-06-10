@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\SimpleFormAuthenticatorInterface;
 use WeavidBundle\Entity\User;
+use WeavidBundle\Utils\LdapClientExtended;
 
 class SimpleFormAuthenticator implements SimpleFormAuthenticatorInterface {
 	/** @var UserPasswordEncoderInterface */
@@ -23,14 +24,13 @@ class SimpleFormAuthenticator implements SimpleFormAuthenticatorInterface {
 	private $em;
 	/** @var ContainerInterface  */
 	private $container;
-	/** @var \Symfony\Bridge\Monolog\Logger  */
-	private $logger;
+	/** @var LdapClientExtended */
+	private $zldap;
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-		$this->encoder = $container->get('security.password_encoder');
-		$this->em = $container->get('doctrine.orm.entity_manager');
-		$this->logger = $container->get('logger');
+	public function __construct( UserPasswordEncoderInterface $encoder, EntityManager $em, LdapClientExtended $zldap ) {
+		$this->encoder = $encoder;
+		$this->em = $em;
+		$this->zldap = $zldap;
 	}
 
 	public function authenticateToken( TokenInterface $token, UserProviderInterface $userProvider, $providerKey ) {
@@ -55,27 +55,37 @@ class SimpleFormAuthenticator implements SimpleFormAuthenticatorInterface {
 	}
 
 	public function createToken( Request $request, $username, $password, $providerKey ) {
+
+		// RegEx to identify FHB/THB mail accounts
 		$emailRegex = '/[a-zA-Z0-9\.]+@fh-brandenburg\.de$|[a-zA-Z0-9\.]+@th-brandenburg\.de$/';
+		// if RegEx matches, it's a university mail
 		$isUniversityMail = preg_match($emailRegex, $username);
+		// if it isn't an email address, it's probably a university account
 		$isUniversityAccount = !filter_var($username, FILTER_VALIDATE_EMAIL);
 
 		if($isUniversityMail || $isUniversityAccount ){
-			$ldap = $this->container->get('zldap');
 			$universityAccount = explode("@", $username)[0];
-			$ldap->bind(sprintf('cn=%s,ou=users,o=data', $universityAccount), $password);
+
+			// Bind LDAP user DN and password
+			$this->zldap->bind(sprintf('cn=%s,ou=users,o=data', $universityAccount), $password);
+
+			// Fetch user account from LDAP
 			$ldapAccount =
-				$ldap->findParsed('ou=users,o=data',sprintf('(cn=%s)', $universityAccount));
-			$this->logger->info(print_r($ldapAccount, true));
+				$this->zldap->findParsed('ou=users,o=data',sprintf('(cn=%s)', $universityAccount));
+
+			// Check if user is already in database
 			$user = $this->em->getRepository("WeavidBundle:User")->findOneBy([
 				'email' => $ldapAccount['email']
 			]);
 			if($user !== null && $user instanceof User){
+				// if user is already in database, return token
 				return new UsernamePasswordToken(
 					$user->getEmail(),
 					$user->getPassword(),
 					$providerKey
 				);
 			} else {
+				// if not, create new user and fill with initial data
 				$newUser = new User();
 				$newUser->setEmail($ldapAccount['email']);
 				$newUser->setLdap(true);
@@ -90,8 +100,12 @@ class SimpleFormAuthenticator implements SimpleFormAuthenticatorInterface {
 				$newUser->setJobPosition('Student');
 				$newUser->setDegree('NONE');
 				$newUser->setGender($ldapAccount['gender']);
+
+				// Persist user in database
 				$this->em->persist($newUser);
 				$this->em->flush();
+
+				// return user token
 				return new UsernamePasswordToken(
 					$newUser->getEmail(),
 					$newUser->getPassword(),
@@ -99,9 +113,11 @@ class SimpleFormAuthenticator implements SimpleFormAuthenticatorInterface {
 				);
 			}
 		} else {
+			// if no university account, fetch user from database
 			$user = $this->em->getRepository( "WeavidBundle:User" )->findOneBy( [ "email" => $username ] );
 			if( $user !== null && $user instanceof User ){
 				if($this->encoder->isPasswordValid( $user, $password )){
+					// if everything's correct, return token
 					return new UsernamePasswordToken(
 						$username,
 						$password,
@@ -110,7 +126,8 @@ class SimpleFormAuthenticator implements SimpleFormAuthenticatorInterface {
 				}
 			}
 		}
-		
+
+		// if nothring was returned until now, the credentials were wrong
 		throw new BadCredentialsException('Bad credentials.');
 	}
 }

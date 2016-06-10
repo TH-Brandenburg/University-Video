@@ -12,7 +12,7 @@ services:
         arguments: ["%ldap_host%", "%ldap_port%", "%ldap_version%", "%ldap_ssl%", "%ldap_tls%"]
     simple_form_authenticator:
         class:  WeavidBundle\Security\SimpleFormAuthenticator
-        arguments: ["@service_container"]
+        arguments: ["@security.password_encoder", "@doctrine.orm.entity_manager", "@zldap"]
     my.listener:
         class: WeavidBundle\EventListener\TimestampSubscriber
         tags:
