@@ -42,11 +42,13 @@ class VideoController extends Controller
 
         if($form->isSubmitted() && $form->isValid()){
 
-            $video->setOwner($this->get('security.token_storage')->getToken()->getUser());
+            $video->setOwner($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($video);
             $em->flush();
+            $this->addFlash('success', 'Video hinzugefügt.');
+            return $this->redirectToRoute('videoIndex');
         }
 
         return $this->render('video/add-video.html.twig', [
@@ -70,6 +72,7 @@ class VideoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist( $video );
             $em->flush();
+            $this->addFlash('success', 'Änderungen übernommen.');
         }
 
         return $this->render('video/edit-video.html.twig', [
