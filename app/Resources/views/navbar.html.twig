@@ -17,15 +17,13 @@
                 <li>
                     <a href="{{ path('videoIndex') }}"><i class="fa fa-video-camera"></i> Videos</a>
                 </li>
-                {% if is_granted('ROLE_LECTURER') %}
+                {% if is_granted('ROLE_USER') %}
                 <li>
                     <a href="{{ path('indexLecture') }}"><i class="fa fa-list"></i> Vorlesungen</a>
                 </li>
                 <li>
                     <a href="{{ path('courseIndex') }}"><i class="fa fa-mortar-board"></i> Kurse</a>
                 </li>
-                {% endif %}
-                {% if is_granted('ROLE_USER') %}
                 <li>
                     <a href="{{ path('categoryIndex') }}"><i class="fa fa-tree"></i> Kategorien</a>
                 </li>
