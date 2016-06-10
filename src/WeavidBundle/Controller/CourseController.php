@@ -74,7 +74,7 @@ class CourseController extends Controller
 	 * @Route("/courses/{id}/edit", name="editCourse")
 	 * @Security("course.isOwner(user)")
 	 */
-	public function updateAction(Request $request, \WeavidBundle\Entity\Course $course)
+	public function editAction(Request $request, \WeavidBundle\Entity\Course $course)
 	{
 
 		/** @var EntityManager $em */
@@ -87,6 +87,8 @@ class CourseController extends Controller
 		if($courseDetailForm->isSubmitted() && $courseDetailForm->isValid()){
 			$em->persist( $course );
 			$em->flush();
+			$this->addFlash( 'success', 'Änderungen übernommen.' );
+			return $this->redirectToRoute( 'editCourse', ['id'=>$course->getId()] );
 		}
 
 		// Create form to add lectures to course
@@ -116,6 +118,8 @@ class CourseController extends Controller
 			// Persist course lecture
 			$em->persist( $courseLecture );
 			$em->flush();
+			$this->addFlash( 'success', 'Vorlesung hinzugefügt.' );
+			return $this->redirectToRoute( 'editCourse', ['id'=>$course->getId()] );
 		}
 
 		$orderedCourseLectures = $em->getRepository( 'WeavidBundle:CourseLecture' )
@@ -233,6 +237,38 @@ class CourseController extends Controller
 		}
 
 		return $this->redirectToRoute( 'editCourse', [ 'id' => $courseLecture->getCourse()->getId() ] );
+
+	}
+
+	/**
+	 * @Route("/courselecture/{id}/remove", name="removeCourseLecture")
+	 * @Security("has_role('ROLE_LECTURER') and courseLecture.getCourse().isOwner(user)")
+	 */
+	public function removeCourseLectureAction(Request $request, CourseLecture $courseLecture)
+	{
+
+		/** @var EntityManager $em */
+		$em = $this->getDoctrine()->getManager();
+		$em->getConnection()->beginTransaction();
+		$course = $courseLecture->getCourse();
+
+		if($courseLecture->hasNextLecture()){
+			$nextCourseLecture = $courseLecture->getNextLecture();
+			$previousCourseLecture = $courseLecture->getPreviousLecture();
+			$courseLecture->setPreviousLecture(null);
+			$em->persist( $courseLecture );
+			$em->flush();
+			$nextCourseLecture->setPreviousLecture($previousCourseLecture);
+			$em->persist( $nextCourseLecture );
+		}
+
+		$em->remove( $courseLecture );
+		$em->flush();
+
+		$em->commit();
+		$this->addFlash( 'success', 'Vorlesung aus Kurs entfernt.' );
+
+		return $this->redirectToRoute( 'editCourse', ['id' => $course->getId()] );
 
 	}
 

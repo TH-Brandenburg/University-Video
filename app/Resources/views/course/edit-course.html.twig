@@ -34,7 +34,10 @@
                                href="{{ path('moveDownCourseLecture', {'id': courseLectureAssociation.id}) }}">
                                 <i class="fa fa-chevron-down"></i>
                             </a>
-                            <a class="btn btn-xs btn-danger" href="#"><i class="fa fa-remove"></i></a>
+                            <a class="btn btn-xs btn-danger"
+                               href="{{ path('removeCourseLecture', {'id': courseLectureAssociation.id}) }}">
+                                <i class="fa fa-remove"></i>
+                            </a>
                         </div>
                     </div>
                 {% endfor %}

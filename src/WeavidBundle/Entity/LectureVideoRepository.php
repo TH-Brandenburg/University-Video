@@ -17,6 +17,10 @@ class LectureVideoRepository extends EntityRepository
 			->andWhere( 'lv.previousLectureVideo is NULL')
 			->setParameter( 'lecture', $lecture )
 			->getQuery()->getOneOrNullResult();
+
+		if($lectureVideo === null){
+			return null;
+		}
 		
 		$lectureVideos = new ArrayCollection();
 		do {

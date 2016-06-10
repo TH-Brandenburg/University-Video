@@ -18,6 +18,10 @@ class CourseLectureRepository extends EntityRepository
 		                     ->setParameter( 'course', $course )
 		                     ->getQuery()->getOneOrNullResult();
 
+		if($courseLecture === null){
+			return null;
+		}
+
 		$courseLectures = new ArrayCollection();
 		do {
 			$courseLectures->add($courseLecture);
